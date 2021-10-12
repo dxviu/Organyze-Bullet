@@ -5,6 +5,6 @@ Authors:
 - James Daniel
 - Nicholas Dedvukaj
 - Ibraham Hussaini
-- Owace hishani
+- Owace Shishani
 - Jordan Yen
 
