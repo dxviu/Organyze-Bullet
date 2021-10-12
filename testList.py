@@ -9,7 +9,7 @@ class task(object):
     self.status = 'incomplete'
     self.dueDate = 'not available'
     self.description = 'not available'
-    self.comment = 'not available'
+    self.comment = 'not available' 
 
   def enterData(self):
     self.type = str(input("What is the type? Enter '*' for task, 'o' for event or '-' for note: "))
