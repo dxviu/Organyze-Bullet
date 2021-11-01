@@ -2,13 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:organyzebullet_app/pallete.dart';
 
 class PasswordInput extends StatelessWidget {
-  const PasswordInput({
-    required Key key,
-    @required this.icon,
-    @required this.hint,
-    this.inputType,
-    this.inputAction,
-  }) : super(key: key);
+  const PasswordInput({ Key? key, required this.icon, required this.hint,
+    this.inputType, this.inputAction }) : super(key: key);
 
   final IconData icon;
   final String hint;
