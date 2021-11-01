@@ -7,8 +7,8 @@ class PasswordInput extends StatelessWidget {
 
   final IconData icon;
   final String hint;
-  final TextInputType inputType;
-  final TextInputAction inputAction;
+  final TextInputType? inputType;
+  final TextInputAction? inputAction;
 
   @override
   Widget build(BuildContext context) {
