@@ -3,7 +3,7 @@ import 'package:organyzebullet_app/pallete.dart';
 
 class TextInputField extends StatelessWidget {
   const TextInputField({
-    Key key,
+    required Key key,
     @required this.icon,
     @required this.hint,
     this.inputType,
