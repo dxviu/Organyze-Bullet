@@ -19,9 +19,11 @@ class TextInputField extends StatelessWidget {
         height: size.height * 0.08,
         width: size.width * 0.8,
         decoration: BoxDecoration(
+          Opacity(
           color: Colors.grey[500],
           opacity: 0.5;
           borderRadius: BorderRadius.circular(16),
+            ),
         ),
         child: Center(
           child: TextField(
