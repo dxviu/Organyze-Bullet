@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:organyzebullet_app/pallete.dart';
 
 class TextInputField extends StatelessWidget {
-  const TextInputField({ required Key key, required this.icon, required this.hint,
-    this.inputType?, this.inputAction? }) : super(key: key);
+  const TextInputField({ Key key, @required this.icon, @required this.hint,
+    this.inputType, this.inputAction }) : super(key: key);
 
   final IconData icon;
   final String hint;
-  final TextInputType inputType;
-  final TextInputAction inputAction;
+  final TextInputType? inputType;
+  final TextInputAction? inputAction;
 
   @override
   Widget build(BuildContext context) {
