@@ -3,7 +3,7 @@ import 'package:organyzebullet_app/pallete.dart';
 
 class PasswordInput extends StatelessWidget {
   const PasswordInput({
-    Key key,
+    required Key key,
     @required this.icon,
     @required this.hint,
     this.inputType,
