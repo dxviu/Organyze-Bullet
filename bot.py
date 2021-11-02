@@ -136,5 +136,23 @@ async def list_entries(ctx):
                 response += f"{bullet_key[server_json[e]['type']]} {server_json[e]['name']} ({e})\n"
     await ctx.send(response)
 
+@bot.command(name="status")
+async def set_status(ctx, e_id: str, entry_type: str):
+    if entry_type in bullet_key.keys():
+        async with aiohttp.ClientSession() as session:
+            target_ref = f"{db_ref[:-5]}/{e_id}.json"
+            async with session.get(target_ref) as r:
+                if r.status == 200:
+                    server_json = await r.json()
+                    server_json["type"] = entry_type
+                    payload = json.dumps(server_json, separators=(',', ':'))
+                    await session.patch(target_ref, data=payload)
+                    await ctx.send(f"Updated {e_id}.")
+                else:
+                    ctx.send(f"{e_id} does not exist on the server.")
+    else:
+        ctx.send("""Invalid format.
+Syntax: `o!status <entryID> <entryType>`
+Entries can be one of the following: info, task, event, started, complete.""")
 
 bot.run(token)
