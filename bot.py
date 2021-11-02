@@ -23,43 +23,68 @@ firebase_key = os.environ['firebase_key']
 
 # hardcoded for demo
 db_ref = "https://organyze-bullet-default-rtdb.firebaseio.com/Users/-MnT6JQIenweIdXRoH8d/Notebooks/Demo/entries.json"
- 
+
 prefix = 'o! '
 intents = discord.Intents.all()
 
 #help_command=None removes the default help
-bot = commands.Bot(command_prefix=prefix, description=description, intents=intents,  help_command=None)
+bot = commands.Bot(command_prefix=prefix,
+                   description=description,
+                   intents=intents,
+                   help_command=None)
 
-
-bullet_key = {"info": "-", "task": "•", "event": "○", "started": "/", "complete": "X"}
+bullet_key = {
+    "info": "-",
+    "task": "•",
+    "event": "○",
+    "started": "/",
+    "complete": "X"
+}
 
 task_dictionary = dict()
+
 
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})!')
     print('------')
 
+
 @bot.command()
 async def about(ctx):
     """About this bot"""
     await ctx.send(description)
 
+
 @bot.command()
 async def help(ctx):
     # author = ctx.message.author // to send as DM -> await author.send(embed=embed)
-    
-    e = discord.Embed(
-      color = discord.Color.dark_gold()
-    )
-    
-    e.add_field(name='Organyze::Bullet Command List', value = 'Type the syntax, e.g `o! help create`, or any labeled with __More Info:__ to display more information.', inline=False)
-    e.add_field(name= 'o! create', value = "Create a new entry. More Info: `o! help add`. ", inline=False)
-    e.add_field(name= 'o! delete', value = "Delete an entry. More Info: `o! help delete`. ", inline=False)
-    e.add_field(name= 'o! edit', value = "Edit an entry/timer/event. More Info: `o! help edit`. ", inline=False)
-    e.add_field(name= 'o! help', value = "Display the Command list.", inline=False)
+
+    e = discord.Embed(color=discord.Color.dark_gold())
+
+    e.add_field(
+        name='Organyze::Bullet Command List',
+        value=
+        'Type the syntax, e.g `o! help create`, or any labeled with __More Info:__ to display more information.',
+        inline=False)
+    e.add_field(name='o! create',
+                value="Create a new entry. More Info: `o! help create`. ",
+                inline=False)
+    e.add_field(name='o! delete',
+                value="Delete an entry. More Info: `o! help delete`. ",
+                inline=False)
+    e.add_field(name='o! edit',
+                value="Edit an entry/timer/event. More Info: `o! help edit`. ",
+                inline=False)
+    e.add_field(name='o! list',
+                value="List all entries of a notebook. More Info: `o! help edit`. ",
+                inline=False)
+    e.add_field(name='o! help',
+                value="Display the Command list.",
+                inline=False)
 
     await ctx.send(embed=e)
+
 
 @bot.command()
 async def create(ctx, entry_type: str, description: str):
@@ -77,7 +102,8 @@ async def create(ctx, entry_type: str, description: str):
                 created_id = server_json["name"]
                 response = "Got it!\nAdded your "
                 response += entry_type
-                response += ' "{}" to your **Test** notebook.\n'.format(description)
+                response += ' "{}" to your **Test** notebook.\n'.format(
+                    description)
                 response += f"*ID: {created_id}*"
                 await ctx.send(response)
     else:
@@ -85,22 +111,30 @@ async def create(ctx, entry_type: str, description: str):
 Syntax: `o!create <entryType> <description>`
 Entries can be one of the following: info, task, event, started, complete.""")
 
+
 @bot.command()
 async def delete(ctx, delete_id: str):
-  for i in task_dictionary.keys():
-    if delete_id == i:
-      deleted_entry = task_dictionary.pop(delete_id)
-      await ctx.send(f"Deleted entry: {deleted_entry}")
+    async with aiohttp.ClientSession() as session:
+        async with session.get(db_ref) as r:
+            server_json = await r.json()
+            if delete_id in server_json.keys():
+                delete_ref = f"https://organyze-bullet-default-rtdb.firebaseio.com/Users/-MnT6JQIenweIdXRoH8d/Notebooks/Demo/entries/{delete_id}.json"
+                await session.delete(delete_ref)
+                await ctx.send(f"Deleted entry {delete_id}.")
+
 
 @bot.command(name="list")
 async def list_entries(ctx):
-  response = "__Notebook: **Test**__\n"
-  async with aiohttp.ClientSession() as session:
+    response = "__Notebook: **Test**__\n"
+    async with aiohttp.ClientSession() as session:
         async with session.get(db_ref) as r:
             server_json = await r.json()
-            ordered_entries = sorted(server_json, key=lambda x: (server_json[x]['timestamp']))
+            ordered_entries = sorted(server_json,
+                                     key=lambda x:
+                                     (server_json[x]['timestamp']))
             for e in ordered_entries:
                 response += f"{bullet_key[server_json[e]['type']]} {server_json[e]['name']} ({e})\n"
-  await ctx.send(response)
+    await ctx.send(response)
+
 
 bot.run(token)
