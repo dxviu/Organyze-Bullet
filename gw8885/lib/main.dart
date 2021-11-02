@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:organyzebullet_app/screens/add-entry.dart';
 //import 'package:google_fonts/google_fonts.dart';
 import 'package:organyzebullet_app/screens/home-screen.dart';
+import 'package:organyzebullet_app/screens/view_entries.dart';
 import 'screens/screens.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:organyzebullet_app/database/realtime_database_function.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
         'ForgotPassword': (context) => ForgotPassword(),
         'CreateNewAccount': (context) => CreateNewAccount(),
         'AddNewEntry': (context) => AddNewEntry(),
+        'viewEntries': (context) => viewEntries(),
         //'HomeScreen': (context) => HomeScreen(),
       },
     );
