@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:organyzebullet_app/screens/add-entry.dart';
+import 'package:organyzebullet_app/screens/eg-entry.dart';
 //import 'package:google_fonts/google_fonts.dart';
 import 'package:organyzebullet_app/screens/home-screen.dart';
 import 'package:organyzebullet_app/screens/view_entries.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
         'CreateNewAccount': (context) => CreateNewAccount(),
         'AddNewEntry': (context) => AddNewEntry(),
         'viewEntries': (context) => viewEntries(),
+        'exampleEntry' : (context) => egEntry(),
         //'HomeScreen': (context) => HomeScreen(),
       },
     );

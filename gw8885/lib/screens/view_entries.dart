@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:organyzebullet_app/main.dart';
+
+import '../pallete.dart';
 
 
 
@@ -108,7 +111,7 @@ class viewEntries extends StatelessWidget {
       appBar: AppBar(
         brightness: Brightness.light,
         title: Text(
-          "Home",
+          "Notebooks",
           style: TextStyle(
             color: Colors.black,
           ),
@@ -123,6 +126,8 @@ class viewEntries extends StatelessWidget {
             icon: Icon(Icons.search),
             //onPressed: () {showSearch(context: context, delegate: SearchBar());},
           ),
+          SizedBox(height: 25,)
+
           /*PopupMenuButton(
             onSelected: (val) {
               if (val == 0) {
@@ -158,10 +163,24 @@ class viewEntries extends StatelessWidget {
         ],
       ),
      // body: GetBuilder<NoteController>(builder: (_) => controller.isEmpty() ? emptyNotes() : viewNotes(),),
+      body:GestureDetector(
+        onTap: () => Navigator.pushNamed(context, 'exampleEntry'),
+        child: Container(
+          height: 100,
+          alignment: Alignment.center,
+          child:Text(
+            'o      Entry-Example     01/01/2022',
+            // style: kBodyText,
+          ),
+          decoration: BoxDecoration(
+              border:
+              Border(bottom: BorderSide(width: 2))),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           //Get.to(AddNewNotePage());
-          Navigator.pushNamed(context, 'add-entry');
+          Navigator.pushNamed(context, 'AddNewEntry');
           },
         child: Icon(
           Icons.add,

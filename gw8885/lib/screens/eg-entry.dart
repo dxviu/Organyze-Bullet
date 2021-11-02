@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 //import '../controllers/note_controller.dart';
 
-class AddNewEntry extends StatelessWidget {
+class egEntry extends StatelessWidget {
   //final NoteController controller = Get.find();
 
   @override
@@ -12,7 +12,7 @@ class AddNewEntry extends StatelessWidget {
       appBar: AppBar(
         brightness: Brightness.light,
         title: Text(
-          "Add New Note",
+          "Example Entry",
           style: TextStyle(
             color: Colors.black,
           ),
@@ -38,7 +38,7 @@ class AddNewEntry extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
                 decoration: InputDecoration(
-                  hintText: "Title",
+                  hintText: "New Years day",
                   hintStyle: TextStyle(
                     fontSize: 27,
                     fontWeight: FontWeight.bold,
@@ -54,7 +54,7 @@ class AddNewEntry extends StatelessWidget {
                 ),
                 //controller: controller.contentController,
                 decoration: InputDecoration(
-                  hintText: "Content",
+                  hintText: "◌ Launch fireworks",
                   hintStyle: TextStyle(
                     fontSize: 22,
                   ),
@@ -69,7 +69,7 @@ class AddNewEntry extends StatelessWidget {
                 ),
                 //controller: controller.contentController,
                 decoration: InputDecoration(
-                  hintText: "Date",
+                  hintText: "12:00:00 01/01/2022",
                   hintStyle: TextStyle(
                     fontSize: 22,
                   ),
@@ -84,22 +84,7 @@ class AddNewEntry extends StatelessWidget {
                 ),
                 //controller: controller.contentController,
                 decoration: InputDecoration(
-                  hintText: "Description",
-                  hintStyle: TextStyle(
-                    fontSize: 22,
-                  ),
-                  border: InputBorder.none,
-                ),
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-              ),
-              TextField(
-                style: TextStyle(
-                  fontSize: 22,
-                ),
-                //controller: controller.contentController,
-                decoration: InputDecoration(
-                  hintText: "Comments:",
+                  hintText: "Example Description",
                   hintStyle: TextStyle(
                     fontSize: 22,
                   ),

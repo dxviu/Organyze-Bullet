@@ -66,11 +66,16 @@ class LoginScreen extends StatelessWidget {
               ),
               GestureDetector(
                   onTap: () => Navigator.pushNamed(context, 'viewEntries'),
-                  child: RoundedButton(
-                      buttonName: 'Guest login',
-                  )
-
-              ),
+                  child: Container(
+                    child:Text(
+                      'Guest login',
+                      style: kBodyText,
+                    ),
+                    decoration: BoxDecoration(
+                     border:
+                       Border(bottom: BorderSide(width: 1, color: kWhite))),
+                    ),
+                  ),
               SizedBox(
                 height: 25,
               ),
