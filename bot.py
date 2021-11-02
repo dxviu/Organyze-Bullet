@@ -2,22 +2,36 @@ import os
 import discord
 from discord.ext import commands
 import uuid
+# import firebase_admin as fa
+import json
+import aiohttp
+import datetime
 
 token = os.environ['organyze_token']
-version_num = '0.0.1'
+version_num = '0.0.2'
 description = f'''**Organyze::Bullet - A structured, fun approach to bullet journaling on Discord.**
 Version {version_num} | Powered by discord.py
 '''
+
+# cred_file = json.loads(os.environ['fa_creds'])
+# cred_obj = fa.credentials.Certificate(cred_file)
+# firebase_app = fa.initialize_app(cred_obj, {
+# 	'databaseURL': 'https://organyze-bullet-default-rtdb.firebaseio.com/'
+#	})
+
+firebase_key = os.environ['firebase_key']
+
+# hardcoded for demo
+db_ref = "https://organyze-bullet-default-rtdb.firebaseio.com/Users/-MnT6JQIenweIdXRoH8d/Notebooks/Demo/entries.json"
  
 prefix = 'o! '
-
 intents = discord.Intents.all()
 
 #help_command=None removes the default help
 bot = commands.Bot(command_prefix=prefix, description=description, intents=intents,  help_command=None)
 
 
-bullet_key = {"info": "-", "task": "*", "event": "o", "started": "/", "complete": "X"}
+bullet_key = {"info": "-", "task": "•", "event": "○", "started": "/", "complete": "X"}
 
 task_dictionary = dict()
 
@@ -50,15 +64,26 @@ async def help(ctx):
 @bot.command()
 async def create(ctx, entry_type: str, description: str):
     # o! create event "Test event"
-    entry = ""
     if entry_type in bullet_key.keys():
-        entry += bullet_key[entry_type]
-    entry += " "
-    entry += description
-    entry_id = str(uuid.uuid4())
-    task_dictionary[entry_id] = entry
-    response = f"Added the {entry_type}: {description}"
-    await ctx.send(response)
+        entry_dict = {}
+        entry_dict["type"] = entry_type
+        entry_dict["name"] = description
+        entry_dict["timestamp"] = datetime.datetime.now().timestamp()
+        entry_dict["due_date"] = None
+        payload = json.dumps(entry_dict, separators=(',', ':'))
+        async with aiohttp.ClientSession() as session:
+            async with session.post(db_ref, data=payload) as r:
+                server_json = await r.json()
+                created_id = server_json["name"]
+                response = "Got it!\nAdded your "
+                response += entry_type
+                response += ' "{}" to your **Test** notebook.\n'.format(description)
+                response += f"*ID: {created_id}*"
+                await ctx.send(response)
+    else:
+        await ctx.send("""Invalid format.
+Syntax: `o!create <entryType> <description>`
+Entries can be one of the following: info, task, event, started, complete.""")
 
 @bot.command()
 async def delete(ctx, delete_id: str):
@@ -67,11 +92,15 @@ async def delete(ctx, delete_id: str):
       deleted_entry = task_dictionary.pop(delete_id)
       await ctx.send(f"Deleted entry: {deleted_entry}")
 
-@bot.command()
+@bot.command(name="list")
 async def list_entries(ctx):
-  response = f"Listing all entries\n"
-  for value in task_dictionary:
-    response += f"{task_dictionary[value]} ({value})\n"
+  response = "__Notebook: **Test**__\n"
+  async with aiohttp.ClientSession() as session:
+        async with session.get(db_ref) as r:
+            server_json = await r.json()
+            ordered_entries = sorted(server_json, key=lambda x: (server_json[x]['timestamp']))
+            for e in ordered_entries:
+                response += f"{bullet_key[server_json[e]['type']]} {server_json[e]['name']} ({e})\n"
   await ctx.send(response)
 
 bot.run(token)

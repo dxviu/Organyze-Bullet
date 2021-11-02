@@ -10,19 +10,34 @@ Authors:
 - Owace Shishani
 - Jordan Yen
 
+
+Function:
+-  Allows users to create note books which includes
+    - type of task
+    - completion status
+    - comments
+    - description of what event was added
+- Security
+  - Unique and Randomly generated ID
+  - for each notebook and entry
+- Deletion of specific Entries
+- Returning and displaying previous entries
+
 ### Discord commands
 
 ```python
+# Returns functions that the user would need to interact with the bot.
+!o help
 
-# returns correct bullet point based on task
-Entry.bulletType()
+#creates a notebook based on the users inputs. 
+!o create
 
-# returns a random UID
-Entry.uniqueID()
+#lists all previous entries 
+!o list_entries
 
-# returns task type and task description
-Entry.displayTask
+#deletes an entry given a uniqueID.
+!o delete
 
-#deletes an entry given a uniqueID and list
-delete(list,UID)
+
+
 ```
