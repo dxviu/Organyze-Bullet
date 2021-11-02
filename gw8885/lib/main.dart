@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:organyzebullet_app/screens/add-entry.dart';
 //import 'package:google_fonts/google_fonts.dart';
 import 'package:organyzebullet_app/screens/home-screen.dart';
 import 'screens/screens.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => LoginScreen(),
         'ForgotPassword': (context) => ForgotPassword(),
         'CreateNewAccount': (context) => CreateNewAccount(),
+        'AddNewEntry': (context) => AddNewEntry(),
         //'HomeScreen': (context) => HomeScreen(),
       },
     );
