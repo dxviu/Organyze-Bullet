@@ -25,12 +25,14 @@ class CreateNewAccount extends StatelessWidget {
     //final account = database.child('UID/');
     final usero = TextEditingController();
     final emailo = TextEditingController();
-    //final _password = TextEditingController();
-
+    final passwordo = TextEditingController();
+    final passwordchecko = TextEditingController();
 
 
     usero.addListener(() => print('first text field: ${usero.text}'));
-    emailo.addListener(() => print('first text field: ${emailo.text}'));
+    emailo.addListener(() => print('second text field: ${emailo.text}'));
+    passwordo.addListener(() => print('password text field: ${passwordo.text}'));
+    passwordchecko.addListener(() => print('check text field: ${passwordchecko.text}'));
 
     Size size = MediaQuery.of(context).size;
     return Stack(
@@ -52,7 +54,7 @@ class CreateNewAccount extends StatelessWidget {
                           filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
                           child: CircleAvatar(
                             radius: size.width * 0.14,
-                            backgroundColor: Colors.grey[400].withOpacity(
+                            backgroundColor: Colors.grey[400]!.withOpacity(
                               0.4,
                             ),
                             child: Icon(
@@ -107,11 +109,13 @@ class CreateNewAccount extends StatelessWidget {
                       icon: FontAwesomeIcons.lock,
                       hint: 'Password',
                       inputAction: TextInputAction.next,
+                      myController: passwordo,
                     ),
                     PasswordInput(
                       icon: FontAwesomeIcons.lock,
                       hint: 'Confirm Password',
                       inputAction: TextInputAction.done,
+                      myController: passwordchecko,
                     ),
                     SizedBox(
                       height: 25,
@@ -205,7 +209,7 @@ class CreateNewAccount extends StatelessWidget {
 }
 
 class MessageList extends StatefulWidget {
-  MessageList({Key key}) : super(key: key);
+  MessageList({Key? key}) : super(key: key);
 
   final messageDao = MessageDao();
 

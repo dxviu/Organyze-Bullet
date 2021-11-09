@@ -9,13 +9,22 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:organyzebullet_app/database/realtime_database_function.dart';
 import 'package:organyzebullet_app/database/dataModel.dart';
 import 'package:organyzebullet_app/database/message_dao.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:organyzebullet_app/database/auth.dart';
+
 void main() async {
   //await Firebase.initializeApp();
   //dbfunc oz = new dbfunc();
   //oz.createUser(2, 'username', 'email@email.com', 'password1');
   print("message");
+
   WidgetsFlutterBinding.ensureInitialized(); //this is IMPORTANT to not have a null error message
-  runApp(MyApp());
+  await Firebase.initializeApp();
+  int test = 0;
+  authTest a = new authTest();
+  test =  await a.createUser("potato@gmail.com", "chimmychonka") as int;
+  print("this is the code for error" + test.toString());
+  //runApp(MyApp());
 
 }
 
@@ -27,6 +36,11 @@ void main() async {
         const Duration(milliseconds:1), () => account.set({'UID': ID,'Username':username,'Email':email,'Password':password}));
   }
 }*/
+
+class authTest extends auth{
+  Future<void> anon();
+
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

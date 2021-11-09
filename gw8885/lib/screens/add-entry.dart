@@ -114,6 +114,7 @@ class AddNewEntry extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         //onPressed: () {controller.addNoteToDatabase();},
+        onPressed: () {  },
         child: Icon(
           Icons.check,
         ),
