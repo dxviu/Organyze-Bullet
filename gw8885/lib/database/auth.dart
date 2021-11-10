@@ -8,14 +8,14 @@ import 'package:firebase_database/firebase_database.dart';
 
 
 class auth{
-  final database = FirebaseDatabase.instance.reference();
+  final database = FirebaseDatabase.instance.reference();//not sure if i need this here -\._./-
 
   Future<void> anon() async{
   return Future.delayed(
       const Duration(milliseconds:1), () => FirebaseAuth.instance.signInAnonymously());
   }
 
-  Future<int> createUser(String emailInput,String passwordInput) async {
+  Future<void> createUser(String emailInput,String passwordInput) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailInput,
@@ -24,15 +24,15 @@ class auth{
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
-        return Future.delayed(const Duration(milliseconds:1), () => 1);
+       // return Future.delayed(const Duration(milliseconds:1), () => 1);
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
-        return Future.delayed(const Duration(milliseconds:1), () => 2);
+        //return Future.delayed(const Duration(milliseconds:1), () => 2);
       }
     } catch (e) {
       print(e);
     }
-    return Future.delayed(const Duration(milliseconds:1), () => 0);
+    //return Future.delayed(const Duration(milliseconds:1), () => 0);
   }
 
   Future <void> signInEmail(String emailInput,String passwordInput) async {
@@ -50,15 +50,18 @@ class auth{
     }
     }
 
+  Future <void> verifyEmail() async {
 
-
-    Future <void> verifyEmail() async {
-
-      User? user = FirebaseAuth.instance.currentUser;
-
+      User? user = await FirebaseAuth.instance.currentUser;
       if (user!= null && !user.emailVerified) {
         await user.sendEmailVerification();
+        print("sent");
       }
 
     }
+
+
+  Future <void> signoutEmail() async {
+    await FirebaseAuth.instance.signOut();
+  } // untested
 }

@@ -22,8 +22,12 @@ void main() async {
   await Firebase.initializeApp();
   int test = 0;
   authTest a = new authTest();
-  test =  await a.createUser("potato@gmail.com", "chimmychonka") as int;
+  //test =  await a.createUser("potato@gmail.com", "chimmychonka") as int;
+  a.createUser("ibrahimik1012@gmail.com", "testPassword0987654321");
+  a.signInEmail("ibrahimik1012@gmail.com", "testPassword0987654321");
+  a.verifyEmail();
   print("this is the code for error" + test.toString());
+
   //runApp(MyApp());
 
 }

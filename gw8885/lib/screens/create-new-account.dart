@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:organyzebullet_app/database/dataModel.dart';
 import 'package:organyzebullet_app/database/message_dao.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:organyzebullet_app/database/auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 //import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -16,12 +18,13 @@ import 'package:organyzebullet_app/widgets/widgets.dart';
 class CreateNewAccount extends StatelessWidget {
   //final Future<database> = FirebaseDatabase.instance.reference();
   //FirebaseAuth auth = FirebaseAuth.instance;
-
+    authCreateAcc auth = new authCreateAcc();
 
 
   @override
   Widget build(BuildContext context) {
     int idNumo = 1;
+    int createErrCode = 0; // zero is no error at all, 1 is the password is too low, 2 is the email is already registers
     //final account = database.child('UID/');
     final usero = TextEditingController();
     final emailo = TextEditingController();
@@ -123,7 +126,7 @@ class CreateNewAccount extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () => {
                         idNumo = idNumo + 1,
-                      _sendMessage(usero.text, idNumo, emailo.text, "password")
+                        createUserWError(usero.text, emailo.text, passwordo.text, passwordchecko.text)
                       },
                       style: ElevatedButton.styleFrom(
                         shape: new RoundedRectangleBorder(
@@ -175,6 +178,17 @@ class CreateNewAccount extends StatelessWidget {
   }
 
 
+  Future<void> createUserWError(String User, String emailInput,String passwordInput,String confirmedPassword) async {
+    int createErrCode = 0;
+    if (passwordInput == confirmedPassword) {
+      auth.createUser(emailInput, passwordInput);
+    }
+    else{
+      createErrCode = 3;
+    }
+    //return createErrCode;
+  }
+
 
   void _sendMessage(String nameWrite,int idNum, String emailWrite, String passwordWrite) {
     if (_canSendMessage()) {
@@ -185,39 +199,57 @@ class CreateNewAccount extends StatelessWidget {
     }
   }
 
-  /*Widget _getMessageList() {
-    return Expanded(
-      child: FirebaseAnimatedList(
-        query: widget.messageDao.getMessageQuery(),
-        itemBuilder: (context, snapshot, animation, index) {
-          final json = snapshot.value as Map<dynamic, dynamic>;
-          final message = oUser.fromJson(json);
-          return MessageWidget(message.text, message.date);
-        },
-      ),
+  bool _canSendMessage() => true;
+
+
+
+
+}
+
+
+
+  showAlertDialog(BuildContext context) {
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () {},
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("My title"),
+      content: Text("This is my message."),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 
+  class authCreateAcc extends auth {}
 
 
-  void _scrollToBottom() {
-    if (_scrollController.hasClients) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    }
-  }*/
-  bool _canSendMessage() => true;
-}
 
-class MessageList extends StatefulWidget {
+  class MessageList extends StatefulWidget {
   MessageList({Key? key}) : super(key: key);
 
   final messageDao = MessageDao();
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
+  // TODO: implement createState
+  throw UnimplementedError();
   }
 
   //MessageListState createState() => MessageListState();
-}
+  }
+
+
+
