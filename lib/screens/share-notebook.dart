@@ -9,7 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:organyzebullet_app/pallete.dart';
 import 'package:organyzebullet_app/widgets/widgets.dart';
 
-// Example for Adapter Design no code from firebase
+// Example for Adapter Design no code from firebase may adapt design in upcoming days
 interface User
 {
     public void signedUser();
