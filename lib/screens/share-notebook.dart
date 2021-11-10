@@ -18,7 +18,6 @@ interface User
   
 class NotebookURL implements User
 {
-    // a concrete implementation of bird
     public void signedUser()
     {
         System.out.println("Accessing");
@@ -44,20 +43,15 @@ class Google implements GoogleSignIn
   
 class SignInAdapter implements GoogleSignIn
 {
-    // You need to implement the interface your
-    // client expects to use.
     User user;
     public SignInAdapter(User user)
     {
-        // we need reference to the object we
-        // are adapting
         this.user = user;
     }
   
-    public void squeak()
+    public void signed()
     {
-        // translate the methods appropriately
-        user.makeSound();
+        user.signedUser();
     }
 }
 class Main
