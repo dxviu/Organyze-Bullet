@@ -6,9 +6,10 @@ import uuid
 import json
 import aiohttp
 import datetime
+import asyncio
 
 token = os.environ['organyze_token']
-version_num = '0.0.2'
+version_num = '0.0.3'
 description = f'''**Organyze::Bullet - A structured, fun approach to bullet journaling on Discord.**
 Version {version_num} | Powered by discord.py
 '''
@@ -43,7 +44,6 @@ bullet_key = {
 
 task_dictionary = dict()
 
-
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})!')
@@ -76,9 +76,10 @@ async def help(ctx):
     e.add_field(name='o! edit',
                 value="Edit an entry/timer/event. More Info: `o! help edit`. ",
                 inline=False)
-    e.add_field(name='o! list',
-                value="List all entries of a notebook. More Info: `o! help edit`. ",
-                inline=False)
+    e.add_field(
+        name='o! list',
+        value="List all entries of a notebook. More Info: `o! help edit`. ",
+        inline=False)
     e.add_field(name='o! help',
                 value="Display the Command list.",
                 inline=False)
@@ -136,6 +137,7 @@ async def list_entries(ctx):
                 response += f"{bullet_key[server_json[e]['type']]} {server_json[e]['name']} ({e})\n"
     await ctx.send(response)
 
+
 @bot.command(name="status")
 async def set_status(ctx, e_id: str, entry_type: str):
     if entry_type in bullet_key.keys():
@@ -147,12 +149,65 @@ async def set_status(ctx, e_id: str, entry_type: str):
                     server_json["type"] = entry_type
                     payload = json.dumps(server_json, separators=(',', ':'))
                     await session.patch(target_ref, data=payload)
-                    await ctx.send(f"Updated {e_id}.")
+                    await ctx.send(f"Set {e_id} to {entry_type}.")
                 else:
                     ctx.send(f"{e_id} does not exist on the server.")
     else:
         ctx.send("""Invalid format.
 Syntax: `o!status <entryID> <entryType>`
 Entries can be one of the following: info, task, event, started, complete.""")
+
+
+# naive implementation
+@bot.command(name="complete")
+async def set_complete(ctx, e_id: str):
+    await set_status(ctx, e_id, "complete")
+
+
+@bot.command()
+async def remind(ctx, time, *, task_id):
+    async with aiohttp.ClientSession() as session:
+        target_ref = f"{db_ref[:-5]}/{task_id}.json"
+        async with session.get(target_ref) as r:
+            if r.status == 200:
+                server_json = await r.json()
+                task_description = server_json["name"]
+                # await ctx.send(f"found the {task_description}.")
+            else:
+                ctx.send(f"{task_id} does not exist on the server.")
+
+            converted_time = convert(time)
+
+            #if converted_time == -1:
+            #await ctx.send("Error. You did not enter the time correctly.")
+            #return
+
+            #if converted_time == -2:
+            #await ctx.send("Error, the time must be an integer.")
+
+            response = f"{time} reminder set for **{task_description}**."
+            await ctx.send(response)
+            await asyncio.sleep(converted_time)
+            await ctx.send(
+                f"{ctx.author.mention}, this is your reminder for **{task_description}**."
+            )
+
+
+def convert(time):
+    time_value = ['s', 'm', 'h', 'd']
+
+    time_dict = {"s": 1, "m": 60, "h": 3600, "d": 3600 * 24}
+
+    unit = time[-1]
+
+    if unit not in time_value:
+        return -1
+    try:
+        user_input = int(time[:-1])
+    except:
+        return -2
+
+    return user_input * time_dict[unit]  #returns reminder time
+
 
 bot.run(token)
