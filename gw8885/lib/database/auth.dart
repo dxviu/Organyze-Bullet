@@ -10,30 +10,31 @@ import 'package:firebase_database/firebase_database.dart';
 class auth{
   final database = FirebaseDatabase.instance.reference();//not sure if i need this here -\._./-
 
-  Future<void> anon() async{
-  return Future.delayed(
-      const Duration(milliseconds:1), () => FirebaseAuth.instance.signInAnonymously());
+  void anon() async {
+    FirebaseAuth.instance.signInAnonymously();
   }
 
-  Future<void> createUser(String emailInput,String passwordInput) async {
+  String createUser(String emailInput,String passwordInput) {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailInput,
           password: passwordInput
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
-       // return Future.delayed(const Duration(milliseconds:1), () => 1);
+        return('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
-        //return Future.delayed(const Duration(milliseconds:1), () => 2);
+        return('The account already exists for that email.');
       }
     } catch (e) {
       print(e);
+      return('Account Created');
     }
-    //return Future.delayed(const Duration(milliseconds:1), () => 0);
+    return('');
   }
+
 
   Future <void> signInEmail(String emailInput,String passwordInput) async {
     try {

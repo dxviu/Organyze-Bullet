@@ -54,7 +54,7 @@ class egEntry extends StatelessWidget {
                 ),
                 //controller: controller.contentController,
                 decoration: InputDecoration(
-                  hintText: "◌ Launch fireworks",
+                  hintText: "? Launch fireworks",
                   hintStyle: TextStyle(
                     fontSize: 22,
                   ),

@@ -11,9 +11,6 @@ class TextInputField extends StatelessWidget {
     this.myController
   }) : super(key: key);
 
-
-
-  //final myController = TextEditingController();
   final IconData icon;
   final String hint;
   final TextInputType? inputType;

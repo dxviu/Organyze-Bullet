@@ -1,6 +1,12 @@
-# my_app
+# Organyze: Bullet  
+*Time management for everyone!*
 
-A new Flutter project.
+Authors:
+- James Daniel
+- Nicholas Dedvukaj
+- Ibraham Hussaini
+- Owace Shishani
+- Jordan Yen
 
 ## Getting Started
 
