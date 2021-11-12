@@ -54,7 +54,7 @@ class egEntry extends StatelessWidget {
                 ),
                 //controller: controller.contentController,
                 decoration: InputDecoration(
-                  hintText: "◌ Launch fireworks",
+                  hintText: "? Launch fireworks",
                   hintStyle: TextStyle(
                     fontSize: 22,
                   ),
@@ -99,6 +99,7 @@ class egEntry extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         //onPressed: () {controller.addNoteToDatabase();},
+        onPressed: () {  },
         child: Icon(
           Icons.check,
         ),

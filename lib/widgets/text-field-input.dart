@@ -3,22 +3,19 @@ import 'package:organyzebullet_app/pallete.dart';
 
 class TextInputField extends StatelessWidget {
   const TextInputField({
-    Key key,
-    @required this.icon,
-    @required this.hint,
+    Key? key,
+    required this.icon,
+    required this.hint,
     this.inputType,
     this.inputAction,
     this.myController
   }) : super(key: key);
 
-
-
-  //final myController = TextEditingController();
   final IconData icon;
   final String hint;
-  final TextInputType inputType;
-  final TextInputAction inputAction;
-  final TextEditingController myController;
+  final TextInputType? inputType;
+  final TextInputAction? inputAction;
+  final TextEditingController? myController;
 
 
   @override
@@ -30,7 +27,7 @@ class TextInputField extends StatelessWidget {
         height: size.height * 0.08,
         width: size.width * 0.8,
         decoration: BoxDecoration(
-          color: Colors.grey[500].withOpacity(0.5),
+          color: Colors.grey[500]!.withOpacity(0.5),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Center(

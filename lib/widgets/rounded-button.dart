@@ -3,8 +3,8 @@ import 'package:organyzebullet_app/pallete.dart';
 
 class RoundedButton extends StatelessWidget {
   const RoundedButton({
-    Key key,
-     this.buttonName,
+    Key? key,
+     required this.buttonName,
   }) : super(key: key);
 
   final String buttonName;

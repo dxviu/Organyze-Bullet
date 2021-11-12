@@ -123,7 +123,7 @@ class viewEntries extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.search),
+            icon: Icon(Icons.search), onPressed: () {  },
             //onPressed: () {showSearch(context: context, delegate: SearchBar());},
           ),
           SizedBox(height: 25,)

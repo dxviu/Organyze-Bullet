@@ -1,30 +1,26 @@
 import 'dart:ui';
-<<<<<<< Updated upstream
-
-=======
 import 'package:organyzebullet_app/database/dataModel.dart';
+import 'package:organyzebullet_app/database/auth.dart';
 import 'package:organyzebullet_app/database/message_dao.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
-//import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/firebase_database.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
->>>>>>> Stashed changes
+import 'package:organyzebullet_app/widgets/text-field-input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:organyzebullet_app/pallete.dart';
 import 'package:organyzebullet_app/widgets/widgets.dart';
 
 
-
 class CreateNewAccount extends StatelessWidget {
-  //final Future<database> = FirebaseDatabase.instance.reference();
-  //FirebaseAuth auth = FirebaseAuth.instance;
 
+
+    authCreateAcc auth = new authCreateAcc();
 
 
   @override
   Widget build(BuildContext context) {
     int idNumo = 1;
+    String createErrString;
+    int createErrCode = 0; // zero is no error at all, 1 is the password is too low, 2 is the email is already registers
     //final account = database.child('UID/');
     final usero = TextEditingController();
     final emailo = TextEditingController();
@@ -33,9 +29,9 @@ class CreateNewAccount extends StatelessWidget {
 
 
     usero.addListener(() => print('first text field: ${usero.text}'));
-    emailo.addListener(() => print('first text field: ${emailo.text}'));
-    passwordo.addListener(() => print('first text field: ${passwordo.text}'));
-    passwordchecko.addListener(() => print('first text field: ${passwordchecko.text}'));
+    emailo.addListener(() => print('second text field: ${emailo.text}'));
+    passwordo.addListener(() => print('password text field: ${passwordo.text}'));
+    passwordchecko.addListener(() => print('check text field: ${passwordchecko.text}'));
 
     Size size = MediaQuery.of(context).size;
     return Stack(
@@ -57,7 +53,7 @@ class CreateNewAccount extends StatelessWidget {
                           filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
                           child: CircleAvatar(
                             radius: size.width * 0.14,
-                            backgroundColor: Colors.grey[400].withOpacity(
+                            backgroundColor: Colors.grey[400]!.withOpacity(
                               0.4,
                             ),
                             child: Icon(
@@ -123,24 +119,20 @@ class CreateNewAccount extends StatelessWidget {
                     SizedBox(
                       height: 25,
                     ),
-<<<<<<< Updated upstream
-                    RoundedButton(buttonName: 'Register'),
-=======
-                    ElevatedButton(
-                      onPressed: () => {
-                        idNumo = idNumo + 1,
-                      _sendMessage(usero.text, idNumo, emailo.text, "password")
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(16.0),
-                        ),
-                      ),
-                      child: Text(
-                          "Create Account"
+                  ElevatedButton(
+                    onPressed: () => {
+                      idNumo = idNumo + 1,
+                      createErrString = createUserWError(usero.text, emailo.text, passwordo.text, passwordchecko.text)
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(16.0),
                       ),
                     ),
->>>>>>> Stashed changes
+                    child: Text(
+                        "Create Account"
+                    ),
+                  ),
                     SizedBox(
                       height: 30,
                     ),
@@ -171,16 +163,25 @@ class CreateNewAccount extends StatelessWidget {
               ],
             ),
           ),
-        )
+        ),
+       // FutureBuilder()
       ],
+
     );
-<<<<<<< Updated upstream
-=======
-
-
 
   }
 
+
+  String createUserWError(String User, String emailInput,String passwordInput,String confirmedPassword) {
+    String createErrString = "";
+    if (passwordInput == confirmedPassword) {
+      createErrString = auth.createUser(emailInput, passwordInput);
+    }
+    else{
+      createErrString = "Passwords are not the same";
+    }
+    return createErrString;
+  }
 
 
   void _sendMessage(String nameWrite,int idNum, String emailWrite, String passwordWrite) {
@@ -190,6 +191,26 @@ class CreateNewAccount extends StatelessWidget {
       print("hi");
       messageDao.saveMessage(message);
     }
->>>>>>> Stashed changes
   }
+
+
+  bool _canSendMessage() => true;
+}
+
+
+class authCreateAcc extends auth {}
+
+
+class MessageList extends StatefulWidget {
+  MessageList({Key? key}) : super(key: key);
+
+  final messageDao = MessageDao();
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    throw UnimplementedError();
+  }
+
+  //MessageListState createState() => MessageListState();
 }

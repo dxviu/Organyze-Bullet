@@ -3,9 +3,9 @@ import 'package:organyzebullet_app/pallete.dart';
 
 class PasswordInput extends StatelessWidget {
   const PasswordInput({
-    Key key,
-    @required this.icon,
-    @required this.hint,
+    Key? key,
+    required this.icon,
+    required this.hint,
     this.inputType,
     this.inputAction,
     this.myController,
@@ -13,9 +13,9 @@ class PasswordInput extends StatelessWidget {
 
   final IconData icon;
   final String hint;
-  final TextInputType inputType;
-  final TextInputAction inputAction;
-  final TextEditingController myController;
+  final TextInputType? inputType;
+  final TextInputAction? inputAction;
+  final TextEditingController? myController;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class PasswordInput extends StatelessWidget {
         height: size.height * 0.08,
         width: size.width * 0.8,
         decoration: BoxDecoration(
-          color: Colors.grey[500].withOpacity(0.5),
+          color: Colors.grey[500]!.withOpacity(0.5),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Center(
