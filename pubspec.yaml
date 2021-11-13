@@ -38,7 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.4
   font_awesome_flutter: ^9.2.0
   google_fonts: ^2.1.0
-  shelf: ^1.2.00
+  shelf: ^1.2.0
   shelf_static: ^1.1.0
   firebase_core: ^1.10.0
   firebase_database: ^8.1.0

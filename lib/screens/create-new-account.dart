@@ -2,12 +2,14 @@ import 'dart:ui';
 import 'package:organyzebullet_app/database/dataModel.dart';
 import 'package:organyzebullet_app/database/auth.dart';
 import 'package:organyzebullet_app/database/message_dao.dart';
-import 'package:organyzebullet_app/widgets/text-field-input.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:organyzebullet_app/pallete.dart';
 import 'package:organyzebullet_app/widgets/widgets.dart';
+import 'package:organyzebullet_app/widgets/text-field-input.dart';
 
 
 class CreateNewAccount extends StatelessWidget {
@@ -197,9 +199,16 @@ class CreateNewAccount extends StatelessWidget {
   bool _canSendMessage() => true;
 }
 
+class authCreateAcc extends auth{}
+/*class authCreateAcc extends auth {}
 
-class authCreateAcc extends auth {}
-
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
+  }
+  bool _canSendMessage() => true;
+}*/
 
 class MessageList extends StatefulWidget {
   MessageList({Key? key}) : super(key: key);
