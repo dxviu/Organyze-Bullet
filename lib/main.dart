@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
         'AddNewEntry': (context) => AddNewEntry(),
         'viewEntries': (context) => viewEntries(),
         //'HomeScreen': (context) => HomeScreen(),
+        //test
       },
     );
 
