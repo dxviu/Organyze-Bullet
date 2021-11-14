@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 
 class LoginScreen extends StatelessWidget {
 
+
   loginAuth auth = new loginAuth();
 
   @override
@@ -80,9 +81,13 @@ class LoginScreen extends StatelessWidget {
                     color: Colors.brown,
                   ),
                     child: ElevatedButton(
-                      onPressed: () => {auth.signInEmail(emailo.text, passwordo.text),
-                                        auth.verifyEmailtoLogin()
-                                        },
+                      onPressed: ()  {if (auth.signInEmail(emailo.text, passwordo.text) == "Account Created") {
+                                        if (auth.verifyEmailtoLogin() == 0)
+                                          Navigator.pushNamed(context, 'viewEntries');
+                                        else{print("not verified");}
+                                        }
+                                      else{print("Make sure password and email are correct");}
+                                      },
                       style: ButtonStyle(
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
@@ -145,5 +150,6 @@ class LoginScreen extends StatelessWidget {
 }
 
 class loginAuth extends auth{
+
 
 }
