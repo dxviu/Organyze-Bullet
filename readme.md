@@ -1,8 +1,6 @@
 # Organyze: Bullet  
 *Time management for everyone!*
 
-## Repl.it Tech Demo
-
 Authors:
 - James Daniel
 - Nicholas Dedvukaj
@@ -10,34 +8,28 @@ Authors:
 - Owace Shishani
 - Jordan Yen
 
-
 Function:
--  Allows users to create note books which includes
+-  Allows users to create notebooks which includes
     - type of task
     - completion status
     - comments
     - description of what event was added
 - Security
-  - Unique and Randomly generated ID
-  - for each notebook and entry
-- Deletion of specific Entries
+  - Unique and randomly generated ID for each notebook and entry
+- Deletion of specific entries
 - Returning and displaying previous entries
 
 ### Discord commands
 
-```python
-# Returns functions that the user would need to interact with the bot.
-!o help
+```
+o! create <entryType> "<title>" "<description>"
+Entries can be one of the following: info, task, event, started, complete. The description must be in quites
 
-#creates a notebook based on the users inputs. 
-!o create
+o! delete
 
-#lists all previous entries 
-!o list_entries
+o! list
 
-#deletes an entry given a uniqueID.
-!o delete
+o! remind
 
-
-
+o! remind2
 ```

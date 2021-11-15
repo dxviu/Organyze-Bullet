@@ -209,9 +209,9 @@ class BulletFactory():
                       entry_type: str,
                       entry_desc: str = None,
                       entry_duedate: float = None,
-                      entry_assigned_users: list[int] = None,
-                      entry_comments: list[dict] = None,
-                      entry_children: list[int] = None,
+                      entry_assigned_users: list = None,
+                      entry_comments: list = None,
+                      entry_children: list = None,
                       entry_parent: int = None,
                       entry_bullet_char: str = None,
                       entry_orig_type: str = None) -> BulletEntry:

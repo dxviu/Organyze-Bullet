@@ -1,16 +1,16 @@
 import os
-import discord
-from discord.ext import commands
+import nextcord
+from nextcord.ext import commands
 import uuid
 # import firebase_admin as fa
 import json
 import aiohttp
 import datetime
 import asyncio
-import bulletentry
+import bulletentry as entry
 
 token = os.environ['organyze_token']
-version_num = '0.0.3'
+version_num = '0.1.0'
 description = f'''**Organyze::Bullet - A structured, fun approach to bullet journaling on Discord.**
 Version {version_num} | Powered by discord.py
 '''
@@ -27,7 +27,7 @@ firebase_key = os.environ['firebase_key']
 db_ref = "https://organyze-bullet-default-rtdb.firebaseio.com/Users/-MnT6JQIenweIdXRoH8d/Notebooks/Demo/entries.json"
 
 prefix = 'o! '
-intents = discord.Intents.all()
+intents = nextcord.Intents.all()
 
 #help_command=None removes the default help
 bot = commands.Bot(command_prefix=prefix,
@@ -195,7 +195,7 @@ async def remind(ctx, time, *, task_id):
 
 
 @bot.command()
-async def remind2(ctx, member: discord.Member):
+async def remind2(ctx, member: nextcord.Member):
 
   mentionMember = member.mention
 
