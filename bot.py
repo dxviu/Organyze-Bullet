@@ -194,6 +194,47 @@ async def remind(ctx, time, *, task_id):
             )
 
 
+@bot.command()
+async def remind2(ctx, member: discord.Member):
+
+  mentionMember = member.mention
+
+  await ctx.send("enter time")
+  time = await bot.wait_for('message')
+
+  await ctx.send("enter id")
+  id = await bot.wait_for('message')
+
+  #await ctx.send(f'the member is {mentionMember}')
+
+  async with aiohttp.ClientSession() as session:
+        target_ref = f"{db_ref[:-5]}/{id.content}.json"
+        async with session.get(target_ref) as r:
+            if r.status == 200:
+                server_json = await r.json()
+                task_description = server_json["name"]
+                # await ctx.send(f"found the {task_description}.")
+            else:
+                ctx.send(f"{id.content} does not exist on the server.")
+
+            converted_time = convert(time.content)
+
+            #if converted_time == -1:
+            #await ctx.send("Error. You did not enter the time correctly.")
+            #retur n
+
+            #if converted_time == -2:
+            #await ctx.send("Error, the time must be an integer.")
+
+            response = f"{time.content} reminder set for **{task_description}**."
+            await ctx.send(response)
+            await asyncio.sleep(converted_time)
+            await ctx.send(
+                f"{mentionMember}, this is your reminder for **{task_description}**."
+            )
+  
+
+
 def convert(time):
     time_value = ['s', 'm', 'h', 'd']
 
