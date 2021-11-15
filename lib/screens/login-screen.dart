@@ -8,8 +8,7 @@ import 'package:flutter/services.dart';
 
 
 class LoginScreen extends StatelessWidget {
-
-
+  
   loginAuth auth = new loginAuth();
 
   @override
