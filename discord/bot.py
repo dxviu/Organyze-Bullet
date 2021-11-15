@@ -61,25 +61,25 @@ async def about(ctx):
 async def help(ctx):
     # author = ctx.message.author // to send as DM -> await author.send(embed=embed)
 
-    e = discord.Embed(color=discord.Color.dark_gold())
+    e = nextcord.Embed(color=nextcord.Color.dark_gold())
 
     e.add_field(
         name='Organyze::Bullet Command List',
         value=
         'Type the syntax, e.g `o! help create`, or any labeled with __More Info:__ to display more information.',
         inline=False)
-    e.add_field(name='o! create',
-                value="Create a new entry. More Info: `o! help create`. ",
+    e.add_field(name='o! create <entryType> "<description>"',
+                value="Create a new entry. More Info: `o! help create`.",
                 inline=False)
-    e.add_field(name='o! delete',
-                value="Delete an entry. More Info: `o! help delete`. ",
+    e.add_field(name='o! delete <ID>',
+                value="Delete an entry by its ID. More Info: `o! help delete`.",
                 inline=False)
-    e.add_field(name='o! edit',
-                value="Edit an entry/timer/event. More Info: `o! help edit`. ",
+    e.add_field(name='o! status <entryType>',
+                value="Change the status of an entry. More Info: `o! help status`.",
                 inline=False)
     e.add_field(
         name='o! list',
-        value="List all entries of a notebook. More Info: `o! help edit`. ",
+        value="List all entries of a notebook. More Info: `o! help list`.",
         inline=False)
     e.add_field(name='o! help',
                 value="Display the Command list.",
