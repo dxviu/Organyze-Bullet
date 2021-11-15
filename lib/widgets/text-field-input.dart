@@ -2,13 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:organyzebullet_app/pallete.dart';
 
 class TextInputField extends StatelessWidget {
-  const TextInputField({ Key? key, required this.icon, required this.hint,
-    this.inputType, this.inputAction }) : super(key: key);
+  const TextInputField({
+    Key? key,
+    required this.icon,
+    required this.hint,
+    this.inputType,
+    this.inputAction,
+    this.myController
+  }) : super(key: key);
 
   final IconData icon;
   final String hint;
   final TextInputType? inputType;
   final TextInputAction? inputAction;
+  final TextEditingController? myController;
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +45,11 @@ class TextInputField extends StatelessWidget {
               hintText: hint,
               hintStyle: kBodyText,
             ),
+
             style: kBodyText,
             keyboardType: inputType,
             textInputAction: inputAction,
+            controller: myController,
           ),
         ),
       ),

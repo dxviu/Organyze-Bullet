@@ -1,14 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:organyzebullet_app/database/auth.dart';
 import 'package:organyzebullet_app/pallete.dart';
 import 'package:organyzebullet_app/widgets/widgets.dart';
+import 'dart:ui';
+import 'package:flutter/services.dart';
+
 
 class LoginScreen extends StatelessWidget {
-
-
+  
+  loginAuth auth = new loginAuth();
 
   @override
   Widget build(BuildContext context) {
+
+    final usero = TextEditingController();
+    final emailo = TextEditingController();
+    final passwordo = TextEditingController();
+
+
+    usero.addListener(() => {});
+    emailo.addListener(() => {});
+    passwordo.addListener(() => {});
+
+    Size size = MediaQuery.of(context).size; // from button
+
     return Stack(
       children: [
         BackgroundImage(
@@ -37,11 +53,13 @@ class LoginScreen extends StatelessWidget {
                     hint: 'Email',
                     inputType: TextInputType.emailAddress,
                     inputAction: TextInputAction.next,
+                    myController: emailo,
                   ),
                   PasswordInput(
                     icon: FontAwesomeIcons.lock,
                     hint: 'Password',
                     inputAction: TextInputAction.done, inputType: null,
+                    myController: passwordo,
                   ),
                   GestureDetector(
                     onTap: () => Navigator.pushNamed(context, 'ForgotPassword'),
@@ -53,13 +71,59 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: 25,
                   ),
-                  RoundedButton(
-                    buttonName: 'Login',
+
+                  Container(
+                    height: size.height * 0.08,
+                    width: size.width * 0.8,
+                    decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.brown,
+                  ),
+                    child: ElevatedButton(
+                      onPressed: ()  {if (auth.signInEmail(emailo.text, passwordo.text) == "Account Created") {
+                                        if (auth.verifyEmailtoLogin() == 0)
+                                          Navigator.pushNamed(context, 'viewEntries');
+                                        else{print("not verified");}
+                                        }
+                                      else{print("Make sure password and email are correct");}
+                                      },
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            //side: BorderSide(color: Colors.red)
+                            )
+                          )
+                      ),
+                      child: Text(
+                        "Login",
+                        style:
+                          kBodyText.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
                   ),
                   SizedBox(
                     height: 25,
                   ),
                 ],
+              ),
+              GestureDetector(
+                  onTap: () => {
+                    Navigator.pushNamed(context, 'viewEntries'),
+                    auth.anon()
+                  },
+                  child: Container(
+                    child:Text(
+                      'Guest login',
+                      style: kBodyText,
+                    ),
+                    decoration: BoxDecoration(
+                     border:
+                       Border(bottom: BorderSide(width: 1, color: kWhite))),
+                    ),
+                  ),
+              SizedBox(
+                height: 25,
               ),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, 'CreateNewAccount'),
@@ -82,4 +146,9 @@ class LoginScreen extends StatelessWidget {
       ],
     );
   }
+}
+
+class loginAuth extends auth{
+
+
 }

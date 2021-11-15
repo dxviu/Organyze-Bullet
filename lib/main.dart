@@ -7,11 +7,8 @@ import 'package:organyzebullet_app/database/realtime_database_function.dart';
 import 'package:organyzebullet_app/database/dataModel.dart';
 import 'package:organyzebullet_app/database/message_dao.dart';
 void main() async {
-  //await Firebase.initializeApp();
-  //dbfunc oz = new dbfunc();
-  //oz.createUser(2, 'username', 'email@email.com', 'password1');
-  print("message");
   WidgetsFlutterBinding.ensureInitialized(); //this is IMPORTANT to not have a null error message
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -32,8 +29,18 @@ class MyApp extends StatelessWidget {
         '/': (context) => LoginScreen(),
         'ForgotPassword': (context) => ForgotPassword(),
         'CreateNewAccount': (context) => CreateNewAccount(),
+        'AddNewEntry': (context) => AddNewEntry(),
+        'viewEntries': (context) => viewEntries(),
         //'HomeScreen': (context) => HomeScreen(),
+        //test
       },
     );
+
+
+
   }
+
+
+
+
 }
