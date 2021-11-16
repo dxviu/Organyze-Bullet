@@ -79,7 +79,6 @@ class LoginScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                     color: Colors.brown,
                   ),
-                    //test
                     child: ElevatedButton(
                       onPressed: ()  {if (auth.signInEmail(emailo.text, passwordo.text) == "Account Created") {
                                         if (auth.verifyEmailtoLogin() == 0)
