@@ -9,6 +9,10 @@ import 'package:organyzebullet_app/database/message_dao.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); //this is IMPORTANT to not have a null error message
   await Firebase.initializeApp();
+  //test
+  //realtime r = new realtime();
+  //r.createUser("5", "uTest", "eTest", "pTest");
+  //test
   runApp(MyApp());
 }
 

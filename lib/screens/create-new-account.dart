@@ -7,15 +7,18 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:organyzebullet_app/database/realtime_database_function.dart';
 import 'package:organyzebullet_app/pallete.dart';
 import 'package:organyzebullet_app/widgets/widgets.dart';
 import 'package:organyzebullet_app/widgets/text-field-input.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 class CreateNewAccount extends StatelessWidget {
 
 
     authCreateAcc auth = new authCreateAcc();
+    realtime r = new realtime();
 
 
   @override
@@ -123,8 +126,9 @@ class CreateNewAccount extends StatelessWidget {
                     ),
                   ElevatedButton(
                     onPressed: () => {
-                      idNumo = idNumo + 1,
+                      idNumo =0,
                       createErrString = createUserWError(usero.text, emailo.text, passwordo.text, passwordchecko.text)
+
                     },
                     style: ElevatedButton.styleFrom(
                       shape: new RoundedRectangleBorder(
@@ -173,11 +177,15 @@ class CreateNewAccount extends StatelessWidget {
 
   }
 
-
+  //uses auth
   String createUserWError(String User, String emailInput,String passwordInput,String confirmedPassword) {
     String createErrString = "";
+    String ?_id = "";
     if (passwordInput == confirmedPassword) {
       createErrString = auth.createUser(emailInput, passwordInput);
+      if (FirebaseAuth.instance.currentUser?.uid != null){_id = FirebaseAuth.instance.currentUser!.uid;}
+      else{return "uid is null";}
+      _sendMessage(User, _id, emailInput, passwordInput);
     }
     else{
       createErrString = "Passwords are not the same";
@@ -185,13 +193,13 @@ class CreateNewAccount extends StatelessWidget {
     return createErrString;
   }
 
-
-  void _sendMessage(String nameWrite,int idNum, String emailWrite, String passwordWrite) {
+  void _sendMessage(String nameWrite,String idNum, String emailWrite, String passwordWrite) {
     if (_canSendMessage()) {
-      final message = oUser(nameWrite, idNum ,emailWrite,passwordWrite);
-      final messageDao = MessageDao();
+      r.createUser(idNum, nameWrite, emailWrite,passwordWrite);
+      //final message = oUser(nameWrite, idNum ,emailWrite,passwordWrite);
+      //final messageDao = MessageDao();
       print("hi");
-      messageDao.saveMessage(message);
+      //messageDao.saveMessage(message);
     }
   }
   bool _canSendMessage() => true;

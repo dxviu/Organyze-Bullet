@@ -21,10 +21,21 @@ class realtime {
   final database = FirebaseDatabase.instance.reference();
   //FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future<void> createUser(int ID, String username, String email, String password) async {
-    final account = database.child('UID/');
-    return Future.delayed(
-        const Duration(milliseconds:1), () => account.set({'UID': ID,'Username':username,'Email':email,'Password':password}));
+  void createUser(String ID, String username, String email, String password) {
+    final account = database.child('Users/');
+    account.update({
+          ID: {
+            'Username': username, 'id': ID, 'Email': email, 'Password': password, 'Notebooks': {
+              'Entries': {
+                "1": {
+                  'name': "testname", 'timestamp': "01/01/01", 'type': "Task"
+                }
+              }
+            }
+          }
+        }
+    ).then((_) => print("Has been added"))
+    .catchError((error) => print("cannot create user, try again"));
 }
 
 
