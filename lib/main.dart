@@ -11,7 +11,8 @@ void main() async {
   await Firebase.initializeApp();
   //test
   //realtime r = new realtime();
-  //r.createUser("5", "uTest", "eTest", "pTest");
+  //r.createUser("6", "uTest", "eTest", "pTest");
+  //r.createNotebook("testNotebook");
   //test
   runApp(MyApp());
 }

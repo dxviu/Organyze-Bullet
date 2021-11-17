@@ -25,18 +25,22 @@ class realtime {
     final account = database.child('Users/');
     account.update({
           ID: {
-            'Username': username, 'id': ID, 'Email': email, 'Password': password, 'Notebooks': {
-              'Entries': {
-                "1": {
-                  'name': "testname", 'timestamp': "01/01/01", 'type': "Task"
-                }
-              }
-            }
+            'Username': username, 'id': ID, 'Email': email, 'Password': password,'Notebooks':{}
           }
         }
     ).then((_) => print("Has been added"))
     .catchError((error) => print("cannot create user, try again"));
 }
+
+  void createNotebook(String notebookName) {
+    final account = database.child('Notebooks/');
+    account.update({
+        notebookName : {
+          }
+        }
+    ).then((_) => print("Notebook has been added"))
+        .catchError((error) => print("cannot create user, try again"));
+  }
 
 
 
