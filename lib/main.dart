@@ -10,11 +10,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized(); //this is IMPORTANT to not have a null error message
   await Firebase.initializeApp();
   //test
-  //realtime r = new realtime();
+  realtime r = new realtime();
   //r.createUser("6", "uTest", "eTest", "pTest");
-  //r.createNotebook("testNotebook");
+  r.createNotebook("testNotebook");
   //test
-  runApp(MyApp());
+  //runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

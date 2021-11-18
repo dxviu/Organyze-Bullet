@@ -25,7 +25,9 @@ class realtime {
     final account = database.child('Users/');
     account.update({
           ID: {
-            'Username': username, 'id': ID, 'Email': email, 'Password': password,'Notebooks':{}
+            'Username': username, 'id': ID, 'Email': email, 'Password': password,'Notebooks':{
+              "placeHolder"
+            }
           }
         }
     ).then((_) => print("Has been added"))
@@ -33,7 +35,7 @@ class realtime {
 }
 
   void createNotebook(String notebookName) {
-    final account = database.child('Notebooks/');
+    final account = database.child('Notebooks/6/');
     account.update({
         notebookName : {
           }
