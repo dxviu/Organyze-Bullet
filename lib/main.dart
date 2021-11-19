@@ -7,14 +7,18 @@ import 'package:organyzebullet_app/database/realtime_database_function.dart';
 import 'package:organyzebullet_app/database/dataModel.dart';
 import 'package:organyzebullet_app/database/message_dao.dart';
 void main() async {
+  print("first test");
   WidgetsFlutterBinding.ensureInitialized(); //this is IMPORTANT to not have a null error message
   await Firebase.initializeApp();
+  print("second test");
   //test
-  realtime r = new realtime();
+  //realtime r = new realtime();
   //r.createUser("6", "uTest", "eTest", "pTest");
-  r.createNotebook("testNotebook");
+  //r.createNotebook("testNotebook");
   //test
-  //runApp(MyApp());
+
+  runApp(MyApp());
+  print("third test");
 }
 
 class MyApp extends StatelessWidget {
