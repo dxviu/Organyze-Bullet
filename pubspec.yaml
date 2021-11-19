@@ -43,6 +43,7 @@ dependencies:
   google_fonts: ^2.1.0
   shelf: ^1.2.0
   shelf_static: ^1.1.0
+  async: ^2.8.2
   
 
   #Overrides for issues with google fonts version this is so firebase can run
