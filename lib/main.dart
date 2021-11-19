@@ -6,7 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:organyzebullet_app/database/realtime_database_function.dart';
 import 'package:organyzebullet_app/database/dataModel.dart';
 import 'package:organyzebullet_app/database/message_dao.dart';
-import 'dart:async';
+import 'package:async/async.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); //this is IMPORTANT to not have a null error message
