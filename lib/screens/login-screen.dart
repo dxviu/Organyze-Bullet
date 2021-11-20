@@ -5,10 +5,11 @@ import 'package:organyzebullet_app/pallete.dart';
 import 'package:organyzebullet_app/widgets/widgets.dart';
 import 'dart:ui';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 
 
 class LoginScreen extends StatelessWidget {
-  
   loginAuth auth = new loginAuth();
 
   @override
@@ -17,7 +18,6 @@ class LoginScreen extends StatelessWidget {
     final usero = TextEditingController();
     final emailo = TextEditingController();
     final passwordo = TextEditingController();
-
 
     usero.addListener(() => {});
     emailo.addListener(() => {});
