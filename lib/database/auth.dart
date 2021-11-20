@@ -34,9 +34,10 @@ class auth {
   }
 
 
-  Future <void> signInEmail(String emailInput, String passwordInput) async {
+  String signInEmail(String emailInput, String passwordInput) {
+    String err = "";
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
+      await FirebaseAuth.instance
           .signInWithEmailAndPassword(
           email: emailInput,
           password: passwordInput
@@ -44,14 +45,20 @@ class auth {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
+        err = 'No user found';
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
+        err = ("wrong password");
       }
-      else {print("other error while signin");}
+      else {
+        print("other error while signin");
+      return "Other Error";}
     }catch (e){
       print(e);
       print("signed in");
+      err = "Account Created";
     }
+    return err;
   }
 
   Future <void> verifyEmail() async {
