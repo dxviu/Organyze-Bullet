@@ -21,11 +21,11 @@ class realtime {
   final database = FirebaseDatabase.instance.reference();
   //FirebaseAuth auth = FirebaseAuth.instance;
 
-  void createUser(String ID, String username, String email, String password) {
+  void createUser(String ID, String username, String email) {
     final account = database.child('Users/');
     account.update({
           ID: {
-            'Username': username, 'id': ID, 'Email': email, 'Password': password,'Notebooks':{
+            'Username': username, 'id': ID, 'Email': email,'Notebooks':{
               "placeHolder"
             }
           }

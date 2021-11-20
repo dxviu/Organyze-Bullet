@@ -185,7 +185,7 @@ class CreateNewAccount extends StatelessWidget {
       createErrString = auth.createUser(emailInput, passwordInput);
       if (FirebaseAuth.instance.currentUser?.uid != null){_id = FirebaseAuth.instance.currentUser!.uid;}
       else{return "uid is null";}
-      _sendMessage(User, _id, emailInput, passwordInput);
+      _sendMessage(User, _id, emailInput);
     }
     else{
       createErrString = "Passwords are not the same";
@@ -193,9 +193,9 @@ class CreateNewAccount extends StatelessWidget {
     return createErrString;
   }
 
-  void _sendMessage(String nameWrite,String idNum, String emailWrite, String passwordWrite) {
+  void _sendMessage(String nameWrite,String idNum, String emailWrite) {
     if (_canSendMessage()) {
-      r.createUser(idNum, nameWrite, emailWrite,passwordWrite);
+      r.createUser(idNum, nameWrite, emailWrite);
       //final message = oUser(nameWrite, idNum ,emailWrite,passwordWrite);
       //final messageDao = MessageDao();
       print("hi");
