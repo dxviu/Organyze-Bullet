@@ -1,3 +1,4 @@
+
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class auth {
   String signInEmail(String emailInput, String passwordInput) {
     String err = "";
     try {
-      await FirebaseAuth.instance
+      FirebaseAuth.instance
           .signInWithEmailAndPassword(
           email: emailInput,
           password: passwordInput
@@ -48,7 +49,7 @@ class auth {
         err = 'No user found';
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
-        err = ("wrong password");
+        err =  ("wrong password");
       }
       else {
         print("other error while signin");
@@ -84,4 +85,3 @@ class auth {
     await FirebaseAuth.instance.signOut();
   } // untested
 }
-
