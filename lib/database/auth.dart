@@ -47,6 +47,10 @@ class auth {
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
       }
+      else {print("other error while signin");}
+    }catch (e){
+      print(e);
+      print("signed in");
     }
   }
 
