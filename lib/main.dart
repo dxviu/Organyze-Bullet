@@ -1,24 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:organyzebullet_app/screens/home-screen.dart';
 import 'screens/screens.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:organyzebullet_app/database/realtime_database_function.dart';
-import 'package:organyzebullet_app/database/dataModel.dart';
-import 'package:organyzebullet_app/database/message_dao.dart';
-void main() async {
-  print("first test");
-  WidgetsFlutterBinding.ensureInitialized(); //this is IMPORTANT to not have a null error message
-  await Firebase.initializeApp();
-  print("second test");
-  //test
-  //realtime r = new realtime();
-  //r.createUser("6", "uTest", "eTest", "pTest");
-  //r.createNotebook("testNotebook");
-  //test
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();                         //this is IMPORTANT to not have a null error message
+  await Firebase.initializeApp();
   runApp(MyApp());
-  print("third test");
 }
 
 class MyApp extends StatelessWidget {

@@ -31,8 +31,6 @@
 </head>
 <body>
 
-
-
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
@@ -41,20 +39,11 @@
   <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
 
-
-
 <script type="module">
-
-
-
-
-
   // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js";
+  //import { initializeApp } from "https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js";
   // TODO: Add SDKs for Firebase products that you want to use
-  //https://firebase.google.com/docs/web/setup#available-libraries
-
-
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
   // Your web app's Firebase configuration
   const firebaseConfig = {
@@ -67,9 +56,8 @@
     appId: "1:706502382471:web:eed61d5014914c80e0b922"
   };
 
-// Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
 </script>
 
 <script>
@@ -90,7 +78,7 @@
     if ('serviceWorker' in navigator) {
       // Service workers are supported. Use them.
       window.addEventListener('load', function () {
-        // Wait for registration to finish before dropping the <.script> tag.
+        // Wait for registration to finish before dropping the <script> tag.
         // Otherwise, the browser will load the script multiple times,
         // potentially different versions.
         var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
