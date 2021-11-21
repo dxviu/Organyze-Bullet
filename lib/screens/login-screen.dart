@@ -58,7 +58,7 @@ class LoginScreen extends StatelessWidget {
                   PasswordInput(
                     icon: FontAwesomeIcons.lock,
                     hint: 'Password',
-                    inputAction: TextInputAction.done, inputType: null,
+                    inputAction: TextInputAction.done,
                     myController: passwordo,
                   ),
                   GestureDetector(
