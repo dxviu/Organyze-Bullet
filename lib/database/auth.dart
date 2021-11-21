@@ -34,8 +34,10 @@ class auth {
   }
 
 
+
+
   String signInEmail(String emailInput, String passwordInput) {
-    String err = 'Account-Created';
+    String err = '';
     try {
       FirebaseAuth.instance
           .signInWithEmailAndPassword(
@@ -59,6 +61,10 @@ class auth {
     return err;
   }
 
+
+
+
+
   Future <void> verifyEmail() async {
     User? user = await FirebaseAuth.instance.currentUser;
     if (user != null && !user.emailVerified) {
@@ -69,6 +75,7 @@ class auth {
 
   int verifyEmailtoLogin() {
     User? user = FirebaseAuth.instance.currentUser;
+    if (user !=null ){print()}
     if (user != null && !user.emailVerified) {
       print("Email is not verified");
       return 1;
