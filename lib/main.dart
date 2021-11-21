@@ -10,9 +10,6 @@ import 'package:organyzebullet_app/database/userModel.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();                         //this is IMPORTANT to not have a null error message
   await Firebase.initializeApp();
-
-
-  print(m.getMessageQuery());
   runApp(MyApp());
 }
 
