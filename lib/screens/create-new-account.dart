@@ -142,7 +142,7 @@ class CreateNewAccount extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Already have an account?',
+                          'Already have an account? ',
                           style: kBodyText,
                         ),
                         GestureDetector(
