@@ -128,7 +128,6 @@ class CreateNewAccount extends StatelessWidget {
                     onPressed: () => {
                       idNumo =0,
                       createErrString = createUserWError(usero.text, emailo.text, passwordo.text, passwordchecko.text)
-
                     },
                     style: ElevatedButton.styleFrom(
                       shape: new RoundedRectangleBorder(
@@ -197,35 +196,13 @@ class CreateNewAccount extends StatelessWidget {
   void _sendMessage(String nameWrite,String idNum, String emailWrite) {
     if (_canSendMessage()) {
       r.createUser(idNum, nameWrite, emailWrite);
-      //final message = oUser(nameWrite, idNum ,emailWrite,passwordWrite);
-      //final messageDao = MessageDao();
       print("hi");
-      //messageDao.saveMessage(message);
     }
   }
+
   bool _canSendMessage() => true;
 }
 
 class authCreateAcc extends auth{}
-/*class authCreateAcc extends auth {}
 
-  void _scrollToBottom() {
-    if (_scrollController.hasClients) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    }
-  }
-  bool _canSendMessage() => true;
-}*/
 
-class MessageList extends StatefulWidget {
-  MessageList({Key? key}) : super(key: key);
-
-  final messageDao = MessageDao();
-
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
-  }
-  //MessageListState createState() => MessageListState();
-}
