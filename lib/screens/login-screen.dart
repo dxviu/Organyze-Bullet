@@ -96,6 +96,7 @@ class LoginScreen extends StatelessWidget {
                         else
                         {
                           print("Make sure password and email are correct");
+                          print(emailo.text, passwordo.text);
                         }
                      },
                       style: ButtonStyle(
