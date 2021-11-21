@@ -38,8 +38,7 @@ class auth {
   String signInEmail(String emailInput, String passwordInput) {
     String err = "";
     try {
-      FirebaseAuth.instance
-          .signInWithEmailAndPassword(
+      FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailInput,
           password: passwordInput
       );
