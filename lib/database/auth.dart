@@ -75,7 +75,6 @@ class auth {
 
   int verifyEmailtoLogin() {
     User? user = FirebaseAuth.instance.currentUser;
-    if (user !=null ){print()}
     if (user != null && !user.emailVerified) {
       print("Email is not verified");
       return 1;
