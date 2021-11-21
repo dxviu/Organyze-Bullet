@@ -182,8 +182,6 @@ class CreateNewAccount extends StatelessWidget {
     String createErrString = "";
     if (passwordInput == confirmedPassword) {
       createErrString = auth.createUser(emailInput, passwordInput);
-      auth.verifyEmail();
-      _sendMessage(User, _id, emailInput);
     }
     else{
       createErrString = "Passwords are not the same";
