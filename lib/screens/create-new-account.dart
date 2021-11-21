@@ -180,12 +180,9 @@ class CreateNewAccount extends StatelessWidget {
   //uses auth
   String createUserWError(String User, String emailInput,String passwordInput,String confirmedPassword) {
     String createErrString = "";
-    String ?_id = "";
     if (passwordInput == confirmedPassword) {
       createErrString = auth.createUser(emailInput, passwordInput);
       auth.verifyEmail();
-      if (FirebaseAuth.instance.currentUser?.uid != null){_id = FirebaseAuth.instance.currentUser!.uid;}
-      else{return "uid is null";}
       _sendMessage(User, _id, emailInput);
     }
     else{
