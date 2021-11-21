@@ -19,10 +19,13 @@ class auth {
           password: passwordInput
       );
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
+      if (e.code == 'weak-password') 
+      {
         print('The password provided is too weak.');
         return ('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
+      } 
+      else if (e.code == 'email-already-in-use') 
+      {
         print('The account already exists for that email.');
         return ('The account already exists for that email.');
       }
@@ -41,18 +44,19 @@ class auth {
           email: emailInput,
           password: passwordInput
       );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
+    } on FirebaseAuthException catch (e) 
+    {
+      if (e.code == 'user-not-found') 
+      {
         print('No user found for that email.');
-        err = 'No user found';
-      } else if (e.code == 'wrong-password') {
+        err = 'No User Found';
+      } 
+      else if (e.code == 'wrong-password') 
+      {
         print('Wrong password provided for that user.');
-        err =  ("wrong password");
+        err =  "Wrong Password");
       }
-      else {
-        print("other error while signin");
-      return "Other Error";}
-    }catch (e){
+    } catch (e) {
       print(e);
       print("signed in");
       err = "Account Created";
