@@ -31,7 +31,7 @@ class auth {
       }
     } catch (e) {
       print(e);
-      return ('Account Created');
+      return ("Account Created");
     }
     return ('');
   }
