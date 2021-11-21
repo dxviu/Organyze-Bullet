@@ -62,7 +62,7 @@ class auth {
   }
 
   Future <void> verifyEmail() async {
-    User? user = await FirebaseAuth.instance.currentUser;
+    final User user = FirebaseAuth.instance.currentUser;
     if (user != null && !user.emailVerified) {
       await user.sendEmailVerification();
       print("sent");
@@ -70,7 +70,7 @@ class auth {
   }
 
   int verifyEmailtoLogin() {
-    User? user = FirebaseAuth.instance.currentUser;
+    final User user = FirebaseAuth.instance.currentUser;
     if (user != null && !user.emailVerified) {
       print("Email is not verified");
       return 1;
