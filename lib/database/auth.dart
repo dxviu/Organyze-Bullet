@@ -35,29 +35,27 @@ class auth {
 
 
   String signInEmail(String emailInput, String passwordInput) {
-    String err = "";
+    String err = 'Account-Created';
     try {
       FirebaseAuth.instance
           .signInWithEmailAndPassword(
           email: emailInput,
           password: passwordInput
       );
+      err = "Account-Created";
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
+      if (e.code == "user-not-found") {
         print('No user found for that email.');
-        err = 'No user found';
-      } else if (e.code == 'wrong-password') {
+        err = ('No user found');
+      } else if (e.code == "wrong-password") {
         print('Wrong password provided for that user.');
         err =  ("wrong password");
       }
-      else {
-        print("other error while signin");
-      return "Other Error";}
     }catch (e){
-      print(e);
-      print("signed in");
-      err = "Account Created";
+      //print(e);
+      print("testing error catch");
     }
+    print("signed in");
     return err;
   }
 
@@ -79,6 +77,14 @@ class auth {
       return 0;
     }
   }//this function is only meant to be used for the login scree, might be better in a abtract class but this is easier to do
+
+  String getCurrentUserID(){
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null && user.uid != null){
+      return user.uid as String;
+    }
+    else return "no uid";
+  }
 
   Future <void> signoutEmail() async {
     await FirebaseAuth.instance.signOut();
