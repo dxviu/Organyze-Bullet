@@ -49,16 +49,16 @@ class auth {
       if (e.code == 'user-not-found') 
       {
         print('No user found for that email.');
-        err = 'No User Found';
+        err = "No User Found";
       } 
       else if (e.code == 'wrong-password') 
       {
         print('Wrong password provided for that user.');
-        err =  "Wrong Password");
+        err =  "Wrong Password";
       }
     } catch (e) {
       print(e);
-      print("signed in");
+      print('signed in');
       err = "Account Created";
     }
     return err;
