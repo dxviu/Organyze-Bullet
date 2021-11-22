@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 
-
 class LoginScreen extends StatelessWidget {
   loginAuth auth = new loginAuth();
 
@@ -18,6 +17,7 @@ class LoginScreen extends StatelessWidget {
     final usero = TextEditingController();
     final emailo = TextEditingController();
     final passwordo = TextEditingController();
+
 
     usero.addListener(() => {});
     emailo.addListener(() => {});
@@ -58,7 +58,7 @@ class LoginScreen extends StatelessWidget {
                   PasswordInput(
                     icon: FontAwesomeIcons.lock,
                     hint: 'Password',
-                    inputAction: TextInputAction.done,
+                    inputAction: TextInputAction.done, inputType: null,
                     myController: passwordo,
                   ),
                   GestureDetector(
@@ -80,25 +80,17 @@ class LoginScreen extends StatelessWidget {
                     color: Colors.brown,
                   ),
                     child: ElevatedButton(
-                      onPressed: ()  
-                      {
-                        if (auth.signInEmail(emailo.text, passwordo.text) == "Account Created") 
-                        {
-                          if (auth.verifyEmailtoLogin() == 0)
-                          {
-                            Navigator.pushNamed(context, 'viewEntries');
-                          }
-                          else
-                          {
-                            print("not verified");
-                          }
-                        }
-                        else
-                        {
-                          print("Make sure password and email are correct");
-                          print(auth.signInEmail(emailo.text, passwordo.text));
-                        }
-                     },
+                      onPressed: ()  {
+                        //print(auth.signInEmail(emailo.text, passwordo.text) as String);
+                        if (auth.signInEmail(emailo.text, passwordo.text) == 'Account-Created') {
+                                        if (auth.verifyEmailtoLogin() == 0)
+                                          Navigator.pushNamed(context, 'viewEntries');
+                                        else{
+                                          auth.sendverificationEmailWOChecking();
+                                          print("not verified, Sending Email");}
+                                        }
+                                      else{print("Make sure password and email are correct");}
+                                      },
                       style: ButtonStyle(
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
