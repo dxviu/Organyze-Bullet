@@ -196,7 +196,7 @@ class CreateNewAccount extends StatelessWidget {
   void _sendMessage(String nameWrite,String idNum, String emailWrite) {
     if (_canSendMessage()) {
       r.createUser(idNum, nameWrite, emailWrite);
-      print("hi");
+      print("sent message");
     }
   }
 

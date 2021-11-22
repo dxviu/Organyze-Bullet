@@ -73,6 +73,14 @@ class auth {
     }
   }
 
+  Future <void> sendverificationEmailWOChecking() async {
+    User? user = await FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await user.sendEmailVerification();
+      print("sent");
+    }
+  }
+
   int verifyEmailtoLogin() {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null && !user.emailVerified) {

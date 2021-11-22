@@ -80,10 +80,14 @@ class LoginScreen extends StatelessWidget {
                     color: Colors.brown,
                   ),
                     child: ElevatedButton(
-                      onPressed: ()  {if (auth.signInEmail(emailo.text, passwordo.text) == "Account Created") {
+                      onPressed: ()  {
+                        //print(auth.signInEmail(emailo.text, passwordo.text) as String);
+                        if (auth.signInEmail(emailo.text, passwordo.text) == 'Account-Created') {
                                         if (auth.verifyEmailtoLogin() == 0)
                                           Navigator.pushNamed(context, 'viewEntries');
-                                        else{print("not verified");}
+                                        else{
+                                          auth.sendverificationEmailWOChecking();
+                                          print("not verified, Sending Email");}
                                         }
                                       else{print("Make sure password and email are correct");}
                                       },
