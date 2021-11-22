@@ -19,53 +19,54 @@ class auth {
           password: passwordInput
       );
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') 
-      {
+      if (e.code == 'weak-password') {
         print('The password provided is too weak.');
         return ('The password provided is too weak.');
-      } 
-      else if (e.code == 'email-already-in-use') 
-      {
+      } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
         return ('The account already exists for that email.');
       }
     } catch (e) {
       print(e);
-      return ("Account Created");
+      return ('Account Created');
     }
     return ('');
   }
 
 
+
+
   String signInEmail(String emailInput, String passwordInput) {
-    String err = "";
+    String err = '';
     try {
-      FirebaseAuth.instance.signInWithEmailAndPassword(
+      FirebaseAuth.instance
+          .signInWithEmailAndPassword(
           email: emailInput,
           password: passwordInput
       );
-    } on FirebaseAuthException catch (e) 
-    {
-      if (e.code == 'user-not-found') 
-      {
+      err = "Account-Created";
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "user-not-found") {
         print('No user found for that email.');
-        err = "No User Found";
-      } 
-      else if (e.code == 'wrong-password') 
-      {
+        err = ('No user found');
+      } else if (e.code == "wrong-password") {
         print('Wrong password provided for that user.');
-        err =  "Wrong Password";
+        err =  ("wrong password");
       }
-    } catch (e) {
-      print(e);
-      print('signed in');
-      err = "Account Created";
+    }catch (e){
+      //print(e);
+      print("testing error catch");
     }
+    print("signed in");
     return err;
   }
 
+
+
+
+
   Future <void> verifyEmail() async {
-    User? user = FirebaseAuth.instance.currentUser;
+    User? user = await FirebaseAuth.instance.currentUser;
     if (user != null && !user.emailVerified) {
       await user.sendEmailVerification();
       print("sent");
@@ -82,6 +83,14 @@ class auth {
       return 0;
     }
   }//this function is only meant to be used for the login scree, might be better in a abtract class but this is easier to do
+
+  String getCurrentUserID(){
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null && user.uid != null){
+      return user.uid as String;
+    }
+    else return "no uid";
+  }
 
   Future <void> signoutEmail() async {
     await FirebaseAuth.instance.signOut();
