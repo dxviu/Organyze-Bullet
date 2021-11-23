@@ -158,7 +158,7 @@ async def list_entries(ctx):
                                      key=lambda x:
                                      (server_json[x]['timestamp']))
             for e in ordered_entries:
-                response += f"{bullet_key[server_json[e]['type']]} {server_json[e]['name']} ({e})\n"
+                response += f"{server_json[e]['bullet_char'] if 'bullet_char' in server_json[e].keys() else bullet_key[server_json[e]['type']]} {server_json[e]['name']} ({e})\n"
     await ctx.send(response)
 
 

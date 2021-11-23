@@ -192,7 +192,7 @@ class CustomBulletEntry(BulletEntry):
                  entry_parent=None,
                  entry_bullet_char=None,
                  entry_orig_type=None):
-        super().__init__(entry_id, entry_name, entry_type, entry_desc,
+        super().__init__(entry_name, entry_type, entry_id, entry_desc,
                          entry_duedate, entry_assigned_users, entry_comments,
                          entry_children, entry_parent)
         self.entry_bullet_char = entry_bullet_char
