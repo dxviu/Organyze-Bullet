@@ -8,6 +8,7 @@ authors = ["teamvista <<>>"]
 python = "^3.8"
 aiohttp = "3.6.0"
 nextcord = "^2.0.0a3"
+python-dateutil = "^2.8.2"
 
 [tool.poetry.dev-dependencies]
 
