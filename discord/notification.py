@@ -2,7 +2,7 @@ from datetime import datetime
 from dateutil import parser, tz
 
 
-class Notification:
+class notification:
     """
      In a context menu next to a bullet in a notebook, or by using a Discord bot command, a user can specify how they would like to be reminded (via Push Notifications, a connected Discord Bot, or through a collaborator). Users can assign multiple reminders to a bullet.
      

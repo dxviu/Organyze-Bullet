@@ -8,7 +8,7 @@ import aiohttp
 import datetime
 import asyncio
 import bulletentry as entry
-import notification as notify
+from notification import notification
 from dateutil import parser, tz
 
 token = os.environ['organyze_token']
@@ -200,9 +200,15 @@ async def remind(ctx, time, *, task_id):
 
 
 @bot.command()
-async def test(ctx, time, *, task_id, members: commands.Greedy[nextcord.Member]):
-    notify(time, task_id)
-    time = notify.notify()
+async def test(ctx, members: commands.Greedy[nextcord.Member]):
+    await ctx.send("enter time")
+    time = await bot.wait_for('message')
+
+    await ctx.send("enter id")
+    id = await bot.wait_for('message')
+
+    notify = notification(time, id)
+    
 
     members = ", ".join(x.mention for x in members)
 
@@ -226,9 +232,10 @@ async def test(ctx, time, *, task_id, members: commands.Greedy[nextcord.Member])
             #if converted_time == -2:
             #await ctx.send("Error, the time must be an integer.")
 
-            response = f"{time.content} reminder set for **{task_description}**."
+            response = f"{notify.time.content} reminder set for **{task_description}**."
             await ctx.send(response)
-            await asyncio.sleep(time)
+            await ctx.send(f"remaining seconds until task {notify.seconds_until_notification.content}")
+            await asyncio.sleep(notify)
             await ctx.send('{} this is the reminder for {}'.format(members, task_description))
             
 
