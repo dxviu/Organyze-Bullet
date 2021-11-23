@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:organyzebullet_app/database/dataModel.dart';
 import 'package:organyzebullet_app/database/auth.dart';
 import 'package:organyzebullet_app/database/message_dao.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';

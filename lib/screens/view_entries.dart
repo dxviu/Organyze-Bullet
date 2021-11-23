@@ -163,7 +163,7 @@ class viewEntries extends StatelessWidget {
         ],
       ),
      // body: GetBuilder<NoteController>(builder: (_) => controller.isEmpty() ? emptyNotes() : viewNotes(),),
-      body:GestureDetector(
+      /*body:GestureDetector(
         onTap: () => Navigator.pushNamed(context, 'exampleEntry'),
         child: Container(
           height: 100,
@@ -176,6 +176,18 @@ class viewEntries extends StatelessWidget {
               border:
               Border(bottom: BorderSide(width: 2))),
         ),
+      ),*/
+      body: ListView.builder(
+          itemCount: 5,
+          itemBuilder: (BuildContext context,int index){
+            return ListTile(
+                leading: Icon(Icons.list),
+                trailing: Text("GFG",
+                  style: TextStyle(
+                      color: Colors.green,fontSize: 15),),
+                title:Text("List item $index")
+            );
+          }
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

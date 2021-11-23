@@ -84,7 +84,7 @@ class LoginScreen extends StatelessWidget {
                         //print(auth.signInEmail(emailo.text, passwordo.text) as String);
                         if (auth.signInEmail(emailo.text, passwordo.text) == 'Account-Created') {
                                         if (auth.verifyEmailtoLogin() == 0)
-                                          Navigator.pushNamed(context, 'viewEntries');
+                                          Navigator.pushNamed(context, 'viewNotebooks');
                                         else{
                                           auth.sendverificationEmailWOChecking();
                                           print("not verified, Sending Email");}
@@ -113,7 +113,7 @@ class LoginScreen extends StatelessWidget {
               ),
               GestureDetector(
                   onTap: () => {
-                    Navigator.pushNamed(context, 'viewEntries'),
+                    Navigator.pushNamed(context, 'viewNotebooks'),
                     auth.anon()
                   },
                   child: Container(
