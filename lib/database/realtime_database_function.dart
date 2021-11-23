@@ -10,7 +10,9 @@ import '../main.dart';
 class realtime {
 
   final _database = FirebaseDatabase.instance.reference();
+  String curPath = 'Users/';
   //FirebaseAuth auth = FirebaseAuth.instance;
+
 
   void createUser(String ID, String username, String email) {
     final account = _database.child('Users/');

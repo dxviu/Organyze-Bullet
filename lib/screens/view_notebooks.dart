@@ -4,6 +4,7 @@ import 'package:organyzebullet_app/main.dart';
 import 'package:organyzebullet_app/database/realtime_database_function.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:organyzebullet_app/database/notebookListPublisher.dart';
+import 'package:organyzebullet_app/screens/screens.dart';
 import '../pallete.dart';
 
 
@@ -12,6 +13,7 @@ class viewNotebooks extends StatelessWidget {
  // final controller = Get.put(NoteController());
   final _database = FirebaseDatabase.instance.reference();
   final String ID = "-test";
+  realtime r = new realtime();
 
 
   Widget emptyNotes() {
@@ -50,7 +52,7 @@ class viewNotebooks extends StatelessWidget {
       ),
 
       body: StreamBuilder(
-        stream: _database.child('Users/-test/Notebooks/').onValue,
+        stream: _database.child('Users/$ID/Notebooks/').onValue,
         builder: (context, snapshot) {
           final tilesList = <ListTile>[];
           if(snapshot.hasData) {
@@ -59,6 +61,9 @@ class viewNotebooks extends StatelessWidget {
               final nextNotebook = Map<String,dynamic>.from(value);
               final orderTile = ListTile(
                   leading: Icon(Icons.list),
+                  onTap: () {Navigator.pushNamed(context, "viewEntries");
+                  String notebooknameB = nextNotebook['notebookname'];
+                  r.curPath = 'Users/$ID/Notebooks/$notebooknameB/';},
                   title: Text(nextNotebook['notebookname']));
             tilesList.add(orderTile);
             }
