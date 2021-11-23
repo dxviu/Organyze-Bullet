@@ -1,4 +1,6 @@
+from _typeshed import NoneType
 import os
+import dateutil
 import nextcord
 from nextcord.ext import commands
 import uuid
@@ -10,6 +12,7 @@ import asyncio
 import bulletentry as entry
 from notification import notification
 from dateutil import parser, tz
+from typing import List, Tuple
 
 token = os.environ['organyze_token']
 version_num = '0.1.0'
@@ -92,17 +95,28 @@ async def help(ctx):
 
     await ctx.send(embed=e)
 
+class createFlags(commands.FlagConverter, case_insensitive=True):
+    description: str
+    due: str
+    bullet: str = None
+    parent: str
+    assigned: Tuple[nextcord.Member, ...]
 
 @bot.command()
-async def create(ctx, entry_type: str, description: str):
+async def create(ctx, entry_type: str, name: str, *, flags: createFlags):
     # o! create event "Test event"
     if entry_type in bullet_key.keys():
-        entry_dict = {}
-        entry_dict["type"] = entry_type
-        entry_dict["name"] = description
-        entry_dict["timestamp"] = datetime.datetime.now().timestamp()
-        entry_dict["due_date"] = None
-        payload = json.dumps(entry_dict, separators=(',', ':'))
+        b_factory = entry.BulletFactory()
+        en = b_factory.create_bullet(name, entry_type, flags.description, flags.due, flags.assigned, None, None, flags.parent, flags.bullet)
+        payload = en.get_JSON_payload()
+        # entry_dict = {}
+        # entry_dict["type"] = entry_type
+        # entry_dict["name"] = name
+        # entry_dict["timestamp"] = datetime.datetime.now().replace(
+        #     tzinfo=datetime.timezone.utc).timestamp()
+        # entry_dict["due_date"] = dateutil.parser.parse(flags.due).replace(
+        #     tzinfo=datetime.timezone.utc).timestamp() if flags.due else None
+        # payload = json.dumps(entry_dict, separators=(',', ':'))
         async with aiohttp.ClientSession() as session:
             async with session.post(db_ref, data=payload) as r:
                 server_json = await r.json()
@@ -110,7 +124,7 @@ async def create(ctx, entry_type: str, description: str):
                 response = "Got it!\nAdded your "
                 response += entry_type
                 response += ' "{}" to your **Test** notebook.\n'.format(
-                    description)
+                    name)
                 response += f"*ID: {created_id}*"
                 await ctx.send(response)
     else:
