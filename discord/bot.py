@@ -95,6 +95,7 @@ async def help(ctx):
     await ctx.send(embed=e)
 
 class createFlags(commands.FlagConverter, case_insensitive=True):
+    name: str
     description: Optional[str]
     due: Optional[str]
     bullet: Optional[str]
@@ -102,11 +103,11 @@ class createFlags(commands.FlagConverter, case_insensitive=True):
     assigned: Optional[Tuple[nextcord.Member, ...]]
 
 @bot.command()
-async def create(ctx, entry_type: str, name: str, *, flags: createFlags):
+async def create(ctx, entry_type: str, *, flags: createFlags):
     # o! create event "Test event"
     if entry_type in bullet_key.keys():
         b_factory = entry.BulletFactory()
-        en = b_factory.create_bullet(name, entry_type, flags.description, flags.due, flags.assigned, None, None, None, flags.bullet)
+        en = b_factory.create_bullet(flags.name, entry_type, flags.description, flags.due, flags.assigned, None, None, None, flags.bullet)
         print(en.entry_name)
         payload = en.get_JSON_payload()
         # entry_dict = {}
