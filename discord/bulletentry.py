@@ -1,5 +1,7 @@
 import datetime
 import hashlib
+import json
+import dateutil
 
 
 class BulletEntry:
@@ -111,6 +113,26 @@ class BulletEntry:
         """Boolean check if the entry is completed."""
         return self.entry_type == "complete"
 
+    def get_JSON_payload(self):
+        """
+        Get the JSON payload for the BulletEntry object.
+        :return: The JSON payload.
+        :rtype: dict
+        """
+        payload = {
+            "name": self.entry_name,
+            "type": self.entry_type,
+            "timestamp": self.entry_timestamp,
+            "entry_id": self.entry_id,
+            "description": self.entry_desc,
+            "due_date": self.entry_duedate,
+            "assigned": self.entry_assigned_users,
+            "comments": self.entry_comments,
+            "children": self.entry_children,
+            "parent": self.entry_parent
+        }
+        return json.dumps(payload, separators=(',', ':'))
+
 
 class CustomBulletEntry(BulletEntry):
     """
@@ -185,6 +207,28 @@ class CustomBulletEntry(BulletEntry):
         """
         return self.entry_bullet_char and self.entry_orig_type == self.entry_type
 
+    def get_JSON_payload(self):
+        """
+        Get the JSON payload for the BulletEntry object.
+        :return: The JSON payload.
+        :rtype: dict
+        """
+        payload = {
+            "name": self.entry_name,
+            "type": self.entry_type,
+            "timestamp": self.entry_timestamp,
+            "entry_id": self.entry_id,
+            "description": self.entry_desc,
+            "due_date": self.entry_duedate,
+            "assigned": self.entry_assigned_users,
+            "comments": self.entry_comments,
+            "children": self.entry_children,
+            "parent": self.entry_parent,
+            "bullet_char": self.entry_bullet_char,
+            "orig_type": self.entry_orig_type
+        }
+        return json.dumps(payload, separators=(',', ':'))
+
 
 class BulletFactory():
     """
@@ -213,8 +257,7 @@ class BulletFactory():
                       entry_comments: list = None,
                       entry_children: list = None,
                       entry_parent: int = None,
-                      entry_bullet_char: str = None,
-                      entry_orig_type: str = None) -> BulletEntry:
+                      entry_bullet_char: str = None) -> BulletEntry:
         """
         Create a bullet entry.
         :param entry_name: The entry's name.
@@ -262,12 +305,13 @@ class BulletFactory():
             encode()).hexdigest()
         self.entry_type = entry_type
         self.entry_desc = entry_desc
-        self.entry_duedate = entry_duedate
+        self.entry_duedate = dateutil.parser.parse(entry_duedate).replace(
+            tzinfo=datetime.timezone.utc).timestamp() if entry_duedate else None
         self.entry_assigned_users = entry_assigned_users
         self.entry_comments = entry_comments
         self.entry_children = entry_children
         self.entry_bullet_char = entry_bullet_char
-        self.entry_orig_type = entry_orig_type
+        self.entry_orig_type = entry_type
 
         if self.entry_bullet_char:
             return CustomBulletEntry(
