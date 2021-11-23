@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:organyzebullet_app/main.dart';
 import 'package:organyzebullet_app/database/realtime_database_function.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:organyzebullet_app/database/notebookListPublisher.dart';
+import 'package:organyzebullet_app/database/Publishers.dart';
 import '../pallete.dart';
+import 'package:organyzebullet_app/database/dataModels.dart';
 
-
-
-class viewEntries extends StatelessWidget {
- // final controller = Get.put(NoteController());
+class viewEntries extends StatelessWidget{
+  // final controller = Get.put(NoteController());
   final _database = FirebaseDatabase.instance.reference();
   final String ID = "-test";
   @override
   Widget build(BuildContext context) {
+    final notebookName = ModalRoute.of(context)!.settings.arguments as String;
+    final String path = 'Users/$ID/Notebooks/$notebookName/entries/';
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.light,
@@ -30,51 +31,56 @@ class viewEntries extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.search), onPressed: () {  },
+            icon: Icon(Icons.search), onPressed: () {},
             //onPressed: () {showSearch(context: context, delegate: SearchBar());},
           ),
-          SizedBox(height: 25,)
+          SizedBox(
+            height: 25,
+          )
         ],
       ),
-          body: StreamBuilder(
-    stream: _database.child('Users/$ID/Notebooks/').onValue,
-    builder: (context, snapshot) {
-    final tilesList = <ListTile>[];
-    if(snapshot.hasData) {
-    final notebookList = Map<String,dynamic>.from((snapshot.data! as Event).snapshot.value);
-    notebookList.forEach((key, value) {
-    final nextNotebook = Map<String,dynamic>.from(value);
-    final orderTile = ListTile(
-    leading: Icon(Icons.list),
-    title: Text(nextNotebook['notebookname']));
-    tilesList.add(orderTile);
-    }
-    );
-    }
-    else {ListTile(
-    leading: Icon(Icons.list),
-    title: Text("No Notebook Created")
-    );}
-    //ListView.builder(
-    //   itemCount: 5,
-    //  itemBuilder: (BuildContext context, int index) {
-    return
-    ListView(
-    children: tilesList,
-    );
-    // }
-    //);
-    }
-    ),
-    floatingActionButton: FloatingActionButton(
-    onPressed: () {
-    //Get.to(AddNewNotePage());
-    Navigator.pushNamed(context, 'AddNewEntry');
-    },
-    child: Icon(
-    Icons.add,
-    ),
-    ),
+      body: StreamBuilder(
+          stream: entryStreamPublisher().getEntryStream(path),
+          builder: (context, snapshot) {
+            final tilesList = <ListTile>[];
+            print(path);
+            if (snapshot.hasData){
+              final myEntrys = snapshot.data as List<entryModel>;
+              tilesList.addAll(
+                myEntrys.map((nextEntry){
+                  return ListTile(
+                      leading: Text(nextEntry.date), //or icon
+                      title: Text(nextEntry.entryName),
+                      subtitle: Text(nextEntry.description));
+                }),
+              );
+            } else {
+              tilesList.add(
+                ListTile(
+                  leading: Icon(Icons.list),
+                  title: Text("No Notebook Created"))
+              );
+            }
+            //ListView.builder(
+            //   itemCount: 5,
+            //  itemBuilder: (BuildContext context, int index) {
+            return ListView(
+              children: tilesList,
+            );
+            // }
+            //);
+          }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          //Get.to(AddNewNotePage());
+          Navigator.pushNamed(context, 'AddNewEntry');
+        },
+        child: Icon(
+          Icons.add,
+        ),
+      ),
     );
   }
 }
+
+

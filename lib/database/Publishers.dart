@@ -18,3 +18,19 @@ class notebookListPublisher {
     return streamToPublish;
   }
 }
+
+class entryStreamPublisher{
+  final _database = FirebaseDatabase.instance.reference();
+
+  Stream<List<entryModel>> getEntryStream(String path){
+    final orderStream = _database.child(path).onValue;
+    final streamToPublish = orderStream.map((event){
+      final orderMap = Map<String,dynamic>.from(event.snapshot.value);
+      final orderList = orderMap.entries.map((element) {
+        return entryModel.fromRTDB(Map<String,dynamic>.from(element.value));
+      }).toList();
+      return orderList;
+    });
+    return streamToPublish;
+  }
+}

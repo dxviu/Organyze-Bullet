@@ -10,7 +10,6 @@ import '../main.dart';
 class realtime {
 
   final _database = FirebaseDatabase.instance.reference();
-  String curPath = 'Users/';
   //FirebaseAuth auth = FirebaseAuth.instance;
 
 
@@ -45,6 +44,22 @@ class realtime {
     );
 
 
+  }
+
+}
+
+
+class pathHandler{
+   String path;
+
+  pathHandler({required this.path});
+
+  void setPathForNotebooks(String ID){
+    this.path = 'Users/$ID/Notebooks/';
+  }
+
+  String setPathForEntries(String ID,String notebookName){
+    return('Users/$ID/Notebooks/$notebookName/Entries/');
   }
 
 }

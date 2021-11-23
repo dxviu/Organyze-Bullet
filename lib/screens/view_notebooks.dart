@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:organyzebullet_app/main.dart';
 import 'package:organyzebullet_app/database/realtime_database_function.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:organyzebullet_app/database/notebookListPublisher.dart';
+import 'package:organyzebullet_app/database/Publishers.dart';
 import 'package:organyzebullet_app/screens/screens.dart';
 import '../pallete.dart';
 
@@ -13,18 +13,8 @@ class viewNotebooks extends StatelessWidget {
  // final controller = Get.put(NoteController());
   final _database = FirebaseDatabase.instance.reference();
   final String ID = "-test";
-  realtime r = new realtime();
+  //final String notebookB;
 
-
-  Widget emptyNotes() {
-    return Container(
-      child: Center(
-        child: Text(
-          "You don't have any Notes",
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +51,15 @@ class viewNotebooks extends StatelessWidget {
               final nextNotebook = Map<String,dynamic>.from(value);
               final orderTile = ListTile(
                   leading: Icon(Icons.list),
-                  onTap: () {Navigator.pushNamed(context, "viewEntries");
+                  onLongPress: () {
+                    String notebooknameD = nextNotebook['notebookname'];
+                    _database.child('Users/$ID/Notebooks/$notebooknameD/').remove();
+                  },
+                  onTap: () {
                   String notebooknameB = nextNotebook['notebookname'];
-                  r.curPath = 'Users/$ID/Notebooks/$notebooknameB/';},
+                  print(notebooknameB);
+                  Navigator.pushNamed(context, "viewEntries",arguments: notebooknameB);
+                  },
                   title: Text(nextNotebook['notebookname']));
             tilesList.add(orderTile);
             }

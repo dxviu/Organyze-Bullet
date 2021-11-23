@@ -114,7 +114,7 @@ class LoginScreen extends StatelessWidget {
               GestureDetector(
                   onTap: () => {
                     Navigator.pushNamed(context, 'viewNotebooks'),
-                    auth.anon()
+                    //auth.anon()
                   },
                   child: Container(
                     child:Text(

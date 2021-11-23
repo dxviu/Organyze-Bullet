@@ -53,3 +53,24 @@ class notebookModel{
   }
 
 }
+
+class entryModel{
+  final String entryName;
+  final String date;
+  final String UID;
+  final String description;
+  final String entryType;
+
+
+  entryModel({required this.description, required this.date, required this.UID, required this.entryType, required this.entryName});
+
+  factory entryModel.fromRTDB(Map<String,dynamic> data){
+    return entryModel(
+        description: data['description'] as String,// ?? 'Enter a description',
+        UID: data['UID'] as String,// ?? '-0',
+        entryName: data['name'] as String,// ?? 'Enter a Entry name',
+        entryType: data['type'] as String,// ?? 'Enter a Entry type',
+        date: data['timestamp'] as String// ?? "00/00/00"
+    );
+  }
+}
