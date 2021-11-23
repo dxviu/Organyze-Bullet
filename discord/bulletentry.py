@@ -2,6 +2,11 @@ import datetime
 import hashlib
 import json
 import dateutil
+from dateutil.tz import gettz
+
+tzinfos = {
+    "EDT": gettz("America/Detroit")
+}
 
 
 class BulletEntry:
@@ -45,6 +50,8 @@ class BulletEntry:
                  entry_parent=None):
         if entry_id is None:
             self.entry_id = self.generate_id()
+        else:
+            self.entry_id = entry_id
         self.entry_name = entry_name
         self.entry_type = entry_type
         self.entry_desc = entry_desc
@@ -305,7 +312,7 @@ class BulletFactory():
             encode()).hexdigest()
         self.entry_type = entry_type
         self.entry_desc = entry_desc
-        self.entry_duedate = dateutil.parser.parse(entry_duedate).replace(
+        self.entry_duedate = dateutil.parser.parse(entry_duedate, tzinfos=tzinfos).replace(
             tzinfo=datetime.timezone.utc).timestamp() if entry_duedate else None
         self.entry_assigned_users = entry_assigned_users
         self.entry_comments = entry_comments

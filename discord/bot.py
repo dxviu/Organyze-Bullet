@@ -1,4 +1,3 @@
-from _typeshed import NoneType
 import os
 import dateutil
 import nextcord
@@ -12,7 +11,7 @@ import asyncio
 import bulletentry as entry
 from notification import notification
 from dateutil import parser, tz
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 token = os.environ['organyze_token']
 version_num = '0.1.0'
@@ -96,18 +95,19 @@ async def help(ctx):
     await ctx.send(embed=e)
 
 class createFlags(commands.FlagConverter, case_insensitive=True):
-    description: str
-    due: str
-    bullet: str = None
-    parent: str
-    assigned: Tuple[nextcord.Member, ...]
+    description: Optional[str]
+    due: Optional[str]
+    bullet: Optional[str]
+    parent: Optional[str]
+    assigned: Optional[Tuple[nextcord.Member, ...]]
 
 @bot.command()
 async def create(ctx, entry_type: str, name: str, *, flags: createFlags):
     # o! create event "Test event"
     if entry_type in bullet_key.keys():
         b_factory = entry.BulletFactory()
-        en = b_factory.create_bullet(name, entry_type, flags.description, flags.due, flags.assigned, None, None, flags.parent, flags.bullet)
+        en = b_factory.create_bullet(name, entry_type, flags.description, flags.due, flags.assigned, None, None, None, flags.bullet)
+        print(en.entry_name)
         payload = en.get_JSON_payload()
         # entry_dict = {}
         # entry_dict["type"] = entry_type
