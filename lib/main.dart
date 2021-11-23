@@ -11,15 +11,7 @@ import 'package:organyzebullet_app/database/dataModels.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();                         //this is IMPORTANT to not have a null error message
   await Firebase.initializeApp();
-  //final _database = FirebaseDatabase.instance.reference();
-  //_database.child('Users/-test/Notebooks/').orderByKey().onValue.listen((event) {
-  //  print(event.snapshot.value);
-  //});
-  //realtime r = new realtime();
-  //r.getNotebook('-test');
-  //r.createUser('-test', "testU", "testE");
-  //r.createNotebook("-test","testNotebook");
-  //print (_database.child('User/$ID/Notebooks').orderByKey().onValue)
+
   runApp(MyApp());
 }
 
