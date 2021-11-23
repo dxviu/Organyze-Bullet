@@ -95,6 +95,7 @@ async def help(ctx):
     await ctx.send(embed=e)
 
 class createFlags(commands.FlagConverter, case_insensitive=True):
+    named: str
     description: Optional[str]
     due: Optional[str]
     bullet: Optional[str]
@@ -102,7 +103,7 @@ class createFlags(commands.FlagConverter, case_insensitive=True):
     assigned: Optional[Tuple[nextcord.Member, ...]]
 
 @bot.command()
-async def create(ctx, entry_type: str, name: str, *, flags: createFlags):
+async def create(ctx, entry_type: str, *, flags: createFlags):
     # o! create event "Test event"
     # Alias for info
     if entry_type == "note":
@@ -110,7 +111,7 @@ async def create(ctx, entry_type: str, name: str, *, flags: createFlags):
     if entry_type in bullet_key.keys():
         b_factory = entry.BulletFactory()
         # Parents/Children NYI
-        en = b_factory.create_bullet(name, entry_type, flags.description, flags.due, flags.assigned, None, None, None, flags.bullet)
+        en = b_factory.create_bullet(flags.named, entry_type, flags.description, flags.due, flags.assigned, None, None, None, flags.bullet)
         payload = en.get_JSON_payload()
         # entry_dict = {}
         # entry_dict["type"] = entry_type
@@ -127,7 +128,7 @@ async def create(ctx, entry_type: str, name: str, *, flags: createFlags):
                 response = "Got it!\nAdded your "
                 response += entry_type
                 response += ' "{}" to your **Test** notebook.\n'.format(
-                    name)
+                    flags.named)
                 response += f"*ID: {created_id}*"
                 await ctx.send(response)
     else:
