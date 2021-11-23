@@ -11,7 +11,7 @@ import 'package:organyzebullet_app/database/dataModels.dart';
 class viewEntries extends StatelessWidget{
   // final controller = Get.put(NoteController());
   final _database = FirebaseDatabase.instance.reference();
-  final String ID = FirebaseAuth.instance.currentUser?.uid ?? "-test";
+  final String ID = "-test"; //FirebaseAuth.instance.currentUser?.uid ?? "-test";
   @override
   Widget build(BuildContext context) {
     final notebookName = ModalRoute.of(context)!.settings.arguments as String;
@@ -50,6 +50,10 @@ class viewEntries extends StatelessWidget{
               tilesList.addAll(
                 myEntrys.map((nextEntry){
                   return ListTile(
+                      onLongPress: () {
+                        String eUID = nextEntry.UID;
+                        _database.child("$path$eUID").remove();
+                        },
                       leading: Text(nextEntry.date), //or icon
                       title: Text(nextEntry.entryName),
                       subtitle: Text(nextEntry.description));

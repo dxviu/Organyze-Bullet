@@ -28,8 +28,10 @@ class realtime {
   void createNotebook(String ID, String notebookName) {
     final String _path = 'Users/$ID/Notebooks/';
     final account = _database.child(_path);
-    account.update({
-      notebookName:{"Entries" :"none"}
+    account.update({notebookName: {
+      "notebookname":notebookName,
+      "notebookID" : 2
+    }
     }
     ).then((_) => print("Has been added"))
         .catchError((error) => print("cannot create notebook, try again"));

@@ -13,12 +13,13 @@ import '../pallete.dart';
 class viewNotebooks extends StatelessWidget {
  // final controller = Get.put(NoteController());
   final _database = FirebaseDatabase.instance.reference();
-  final String ID = FirebaseAuth.instance.currentUser?.uid ?? "-test";
-  //final String notebookB;
+  final ID = "-test";
 
 
   @override
   Widget build(BuildContext context) {
+    //final ID = ModalRoute.of(context)!.settings.arguments as String;
+    print('Users/$ID/Notebooks/');
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.light,
@@ -66,10 +67,12 @@ class viewNotebooks extends StatelessWidget {
             }
             );
           }
-          else {ListTile(
+          else {
+            final tilesList = <ListTile>[];
+            tilesList.add(ListTile(
               leading: Icon(Icons.list),
               title: Text("No Notebook Created")
-              );}
+              ));}
           //ListView.builder(
            //   itemCount: 5,
             //  itemBuilder: (BuildContext context, int index) {
@@ -84,7 +87,7 @@ class viewNotebooks extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           //Get.to(AddNewNotePage());
-          Navigator.pushNamed(context, 'AddNewEntry');
+          Navigator.pushNamed(context, 'AddNewNotebook');
           },
         child: Icon(
           Icons.add,

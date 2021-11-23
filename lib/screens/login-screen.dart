@@ -83,8 +83,12 @@ class LoginScreen extends StatelessWidget {
                       onPressed: ()  {
                         //print(auth.signInEmail(emailo.text, passwordo.text) as String);
                         if (auth.signInEmail(emailo.text, passwordo.text) == 'Account-Created') {
-                                        if (auth.verifyEmailtoLogin() == 0)
-                                          Navigator.pushNamed(context, 'viewNotebooks');
+                                        if (auth.verifyEmailtoLogin() == 0) {
+                                         // String ID = auth.getCurrentUserID();
+                                          print("test");
+                                          Navigator.pushNamed(context,
+                                              'viewNotebooks');
+                                        }
                                         else{
                                           auth.sendverificationEmailWOChecking();
                                           print("not verified, Sending Email");}

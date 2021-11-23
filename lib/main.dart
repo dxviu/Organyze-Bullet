@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:organyzebullet_app/database/dataModels.dart';
 import 'package:organyzebullet_app/database/realtime_database_function.dart';
+import 'package:organyzebullet_app/screens/add-notebook.dart';
 import 'package:organyzebullet_app/screens/view_notebooks.dart';
 import 'screens/screens.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         'AddNewEntry': (context) => AddNewEntry(),
         'viewEntries': (context) => viewEntries(),
         'viewNotebooks':(context) => viewNotebooks(),
+        'AddNewNotebook':(context) => AddNewNotebook(),
         //'HomeScreen': (context) => HomeScreen(),
         //test
       },
