@@ -1,4 +1,5 @@
 import os
+import dateutil
 import nextcord
 from nextcord.ext import commands
 import uuid
@@ -8,6 +9,9 @@ import aiohttp
 import datetime
 import asyncio
 import bulletentry as entry
+from notification import notification
+from dateutil import parser, tz
+from typing import List, Tuple, Optional
 
 token = os.environ['organyze_token']
 version_num = '0.1.0'
@@ -45,6 +49,7 @@ bullet_key = {
 
 task_dictionary = dict()
 
+
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})!')
@@ -71,12 +76,14 @@ async def help(ctx):
     e.add_field(name='o! create <entryType> "<description>"',
                 value="Create a new entry. More Info: `o! help create`.",
                 inline=False)
-    e.add_field(name='o! delete <ID>',
-                value="Delete an entry by its ID. More Info: `o! help delete`.",
-                inline=False)
-    e.add_field(name='o! status <entryType>',
-                value="Change the status of an entry. More Info: `o! help status`.",
-                inline=False)
+    e.add_field(
+        name='o! delete <ID>',
+        value="Delete an entry by its ID. More Info: `o! help delete`.",
+        inline=False)
+    e.add_field(
+        name='o! status <entryType>',
+        value="Change the status of an entry. More Info: `o! help status`.",
+        inline=False)
     e.add_field(
         name='o! list',
         value="List all entries of a notebook. More Info: `o! help list`.",
@@ -87,17 +94,33 @@ async def help(ctx):
 
     await ctx.send(embed=e)
 
+class createFlags(commands.FlagConverter, case_insensitive=True):
+    named: str
+    description: Optional[str]
+    due: Optional[str]
+    bullet: Optional[str]
+    parent: Optional[str]
+    assigned: Optional[Tuple[nextcord.Member, ...]]
 
 @bot.command()
-async def create(ctx, entry_type: str, description: str):
+async def create(ctx, entry_type: str, *, flags: createFlags):
     # o! create event "Test event"
+    # Alias for info
+    if entry_type == "note":
+        entry_type = "info"
     if entry_type in bullet_key.keys():
-        entry_dict = {}
-        entry_dict["type"] = entry_type
-        entry_dict["name"] = description
-        entry_dict["timestamp"] = datetime.datetime.now().timestamp()
-        entry_dict["due_date"] = None
-        payload = json.dumps(entry_dict, separators=(',', ':'))
+        b_factory = entry.BulletFactory()
+        # Parents/Children NYI
+        en = b_factory.create_bullet(flags.named, entry_type, flags.description, flags.due, flags.assigned, None, None, None, flags.bullet)
+        payload = en.get_JSON_payload()
+        # entry_dict = {}
+        # entry_dict["type"] = entry_type
+        # entry_dict["name"] = name
+        # entry_dict["timestamp"] = datetime.datetime.now().replace(
+        #     tzinfo=datetime.timezone.utc).timestamp()
+        # entry_dict["due_date"] = dateutil.parser.parse(flags.due).replace(
+        #     tzinfo=datetime.timezone.utc).timestamp() if flags.due else None
+        # payload = json.dumps(entry_dict, separators=(',', ':'))
         async with aiohttp.ClientSession() as session:
             async with session.post(db_ref, data=payload) as r:
                 server_json = await r.json()
@@ -105,7 +128,7 @@ async def create(ctx, entry_type: str, description: str):
                 response = "Got it!\nAdded your "
                 response += entry_type
                 response += ' "{}" to your **Test** notebook.\n'.format(
-                    description)
+                    flags.named)
                 response += f"*ID: {created_id}*"
                 await ctx.send(response)
     else:
@@ -135,7 +158,7 @@ async def list_entries(ctx):
                                      key=lambda x:
                                      (server_json[x]['timestamp']))
             for e in ordered_entries:
-                response += f"{bullet_key[server_json[e]['type']]} {server_json[e]['name']} ({e})\n"
+                response += f"{server_json[e]['bullet_char'] if 'bullet_char' in server_json[e].keys() else bullet_key[server_json[e]['type']]} {server_json[e]['name']} ({e})\n"
     await ctx.send(response)
 
 
@@ -195,19 +218,62 @@ async def remind(ctx, time, *, task_id):
 
 
 @bot.command()
+async def test(ctx, members: commands.Greedy[nextcord.Member]):
+    await ctx.send("enter time")
+    time = await bot.wait_for('message')
+
+    await ctx.send("enter id")
+    id = await bot.wait_for('message')
+
+    notify = notification(time, id)
+    
+
+    members = ", ".join(x.mention for x in members)
+
+
+    async with aiohttp.ClientSession() as session:
+        target_ref = f"{db_ref[:-5]}/{id.content}.json"
+        async with session.get(target_ref) as r:
+            if r.status == 200:
+                server_json = await r.json()
+                task_description = server_json["name"]
+                # await ctx.send(f"found the {task_description}.")
+            else:
+                ctx.send(f"{id.content} does not exist on the server.")
+
+            #converted_time = convert(time.content)
+
+            #if converted_time == -1:
+            #await ctx.send("Error. You did not enter the time correctly.")
+            #retur n
+
+            #if converted_time == -2:
+            #await ctx.send("Error, the time must be an integer.")
+
+            response = f"{notify.time.content} reminder set for **{task_description}**."
+            await ctx.send(response)
+            await ctx.send(f"remaining seconds until task {notify.seconds_until_notification.content}")
+            await asyncio.sleep(notify)
+            await ctx.send('{} this is the reminder for {}'.format(members, task_description))
+            
+
+
+
+
+@bot.command()
 async def remind2(ctx, member: nextcord.Member):
 
-  mentionMember = member.mention
+    mentionMember = member.mention
 
-  await ctx.send("enter time")
-  time = await bot.wait_for('message')
+    await ctx.send("enter time")
+    time = await bot.wait_for('message')
 
-  await ctx.send("enter id")
-  id = await bot.wait_for('message')
+    await ctx.send("enter id")
+    id = await bot.wait_for('message')
+    
 
-  #await ctx.send(f'the member is {mentionMember}')
-
-  async with aiohttp.ClientSession() as session:
+    #await ctx.send(f'the member is {mentionMember}')
+    async with aiohttp.ClientSession() as session:
         target_ref = f"{db_ref[:-5]}/{id.content}.json"
         async with session.get(target_ref) as r:
             if r.status == 200:
@@ -232,7 +298,6 @@ async def remind2(ctx, member: nextcord.Member):
             await ctx.send(
                 f"{mentionMember}, this is your reminder for **{task_description}**."
             )
-  
 
 
 def convert(time):

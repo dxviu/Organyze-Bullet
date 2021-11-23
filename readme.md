@@ -23,7 +23,7 @@ Function:
 
 ```
 o! create <entryType> "<title>" "<description>"
-Entries can be one of the following: info, task, event, started, complete. The description must be in quites
+Entries can be one of the following: info, task, event, started, complete. The title and description must be in quotes.
 
 o! delete
 
