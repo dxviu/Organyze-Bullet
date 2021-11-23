@@ -41,15 +41,15 @@ class Notification:
         return timeDelta
 
     def notify(self, time: float, task_id: str, target: list=None):
-      notification_timestamp = get_time(time)                       
-      seconds_until_notification = calculate_time_difference()
+        notification_timestamp = self.get_time(time)                       
+        seconds_until_notification = self.calculate_time_difference()
 
-      if target is None:
-        return seconds_until_notification
+        if target is None:
+            return seconds_until_notification
       
 
 
-      """"
+    """
         notification_timestamp = get_time(time)                       
         seconds_until_notification = calculate_time_difference()
 
@@ -68,7 +68,7 @@ class Notification:
                 await ctx.send('{} setting reminder for {} on {}'.format(members, task_description, self.time))
                 await asyncio.sleep(seconds_until_notification)
                 await ctx.send('{} this is the reminder for {}'.format(members, task_description))  
-      """"
+    """
 
   
 
