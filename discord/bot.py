@@ -104,10 +104,13 @@ class createFlags(commands.FlagConverter, case_insensitive=True):
 @bot.command()
 async def create(ctx, entry_type: str, name: str, *, flags: createFlags):
     # o! create event "Test event"
+    # Alias for info
+    if entry_type == "note":
+        entry_type = "info"
     if entry_type in bullet_key.keys():
         b_factory = entry.BulletFactory()
+        # Parents/Children NYI
         en = b_factory.create_bullet(name, entry_type, flags.description, flags.due, flags.assigned, None, None, None, flags.bullet)
-        print(en.entry_name)
         payload = en.get_JSON_payload()
         # entry_dict = {}
         # entry_dict["type"] = entry_type

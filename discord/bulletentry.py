@@ -110,7 +110,7 @@ class BulletEntry:
 
     def is_info(self) -> bool:
         """Boolean check if the entry is informational."""
-        return self.entry_type == "info"
+        return self.entry_type in ["info", "note"]
 
     def is_started(self) -> bool:
         """Boolean check if the entry is started."""
@@ -319,6 +319,9 @@ class BulletFactory():
         self.entry_children = entry_children
         self.entry_bullet_char = entry_bullet_char
         self.entry_orig_type = entry_type
+
+        if entry_type == "note":
+            self.entry_type = "info"
 
         if self.entry_bullet_char:
             return CustomBulletEntry(
