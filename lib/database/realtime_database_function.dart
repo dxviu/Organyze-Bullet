@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-
+import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:organyzebullet_app/database/dataModels.dart';
@@ -35,18 +35,35 @@ class realtime {
         .catchError((error) => print("cannot create notebook, try again"));
   }
 
-  void getNotebook(String ID){
-    _database.child('Users/$ID/Notebooks').onValue.listen((event) {
-      final data = new Map<String, dynamic>.from(event.snapshot.value);
-      final notebookData = notebookModel.fromRTDB(data);
-      print(notebookData.notebookName);
-      }
-    );
-
-
+  void createEntry(String ID,String notebookName,String name,String type,String timeStamp,String description){
+    final String _path = 'Users/$ID/Notebooks/$notebookName/entries/';
+    final account = _database.child(_path);
+    final String entryID = getRandomString(10);
+    account.update({entryID: {
+      "name" : name,
+      "type" : type,
+      "UID" : entryID,
+      "timestamp" : timeStamp,
+      "description" : description
+    }
+    }
+    ).then((_) => print("entry has been added"))
+        .catchError((error) => print("cannot create entry, try again"));
   }
 
+  String getRandomString(int length) {
+    const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+    return (
+    String.fromCharCodes(Iterable.generate(
+        length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))))
+    );
+  }
+
+
 }
+
+
 
 
 class pathHandler{

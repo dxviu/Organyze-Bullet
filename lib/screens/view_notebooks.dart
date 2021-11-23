@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:organyzebullet_app/main.dart';
@@ -12,7 +13,7 @@ import '../pallete.dart';
 class viewNotebooks extends StatelessWidget {
  // final controller = Get.put(NoteController());
   final _database = FirebaseDatabase.instance.reference();
-  final String ID = "-test";
+  final String ID = FirebaseAuth.instance.currentUser?.uid ?? "-test";
   //final String notebookB;
 
 

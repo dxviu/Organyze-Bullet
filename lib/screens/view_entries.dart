@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:organyzebullet_app/main.dart';
@@ -10,7 +11,7 @@ import 'package:organyzebullet_app/database/dataModels.dart';
 class viewEntries extends StatelessWidget{
   // final controller = Get.put(NoteController());
   final _database = FirebaseDatabase.instance.reference();
-  final String ID = "-test";
+  final String ID = FirebaseAuth.instance.currentUser?.uid ?? "-test";
   @override
   Widget build(BuildContext context) {
     final notebookName = ModalRoute.of(context)!.settings.arguments as String;
@@ -73,7 +74,7 @@ class viewEntries extends StatelessWidget{
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           //Get.to(AddNewNotePage());
-          Navigator.pushNamed(context, 'AddNewEntry');
+          Navigator.pushNamed(context, 'AddNewEntry', arguments: notebookName,);
         },
         child: Icon(
           Icons.add,
