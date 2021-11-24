@@ -5,7 +5,22 @@ import dateutil
 from dateutil.tz import gettz
 
 tzinfos = {
-    "EDT": gettz("America/Detroit")
+    "EDT": gettz("America/New_York"),
+    "CDT": gettz("America/Chicago"),
+    "MDT": gettz("America/Denver"),
+    "PDT": gettz("America/Los_Angeles"),
+    "EST": gettz("America/New_York"),
+    "CST": gettz("America/Chicago"),
+    "MST": gettz("America/Denver"),
+    "PST": gettz("America/Los_Angeles"),
+    "Eastern Time": gettz("America/New_York"),
+    "Central Time": gettz("America/Chicago"),
+    "Mountain Time": gettz("America/Denver"),
+    "Pacific Time": gettz("America/Los_Angeles"),
+    "ET": gettz("America/New_York"),
+    "CT": gettz("America/Chicago"),
+    "MT": gettz("America/Denver"),
+    "PT": gettz("America/Los_Angeles")
 }
 
 
