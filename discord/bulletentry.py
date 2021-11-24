@@ -62,6 +62,10 @@ class BulletEntry:
         self.entry_parent = entry_parent
         self.entry_timestamp = datetime.datetime.now().replace(
             tzinfo=datetime.timezone.utc).timestamp()
+        if entry_type == "note":
+            self.entry_type = "info"
+        if self.entry_type not in ["info", "task", "event", "started", "complete"]:
+            raise ValueError(f"Invalid entry type: {self.entry_type}")
 
     bullet_key = {
         "info": "-",
@@ -97,8 +101,10 @@ class BulletEntry:
             return "task"
         elif self.entry_type == "event":
             return "event"
-        else:
+        elif self.entry_type == "info":
             return "info"
+        else:
+            raise ValueError(f"Invalid entry type: {self.entry_type}")
 
     def is_task(self) -> bool:
         """Boolean check if the entry is a task."""
@@ -334,3 +340,4 @@ class BulletFactory():
                                self.entry_desc, self.entry_duedate,
                                self.entry_assigned_users, self.entry_comments,
                                self.entry_children, self.entry_parent)
+
