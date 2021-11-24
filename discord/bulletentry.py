@@ -48,20 +48,20 @@ class BulletEntry:
                  entry_comments=None,
                  entry_children=None,
                  entry_parent=None):
+        self.entry_name = entry_name
+        self.entry_timestamp = datetime.datetime.now().replace(
+            tzinfo=datetime.timezone.utc).timestamp()
+        self.entry_parent = entry_parent
         if entry_id is None:
             self.entry_id = self.generate_id()
         else:
             self.entry_id = entry_id
-        self.entry_name = entry_name
         self.entry_type = entry_type
         self.entry_desc = entry_desc
         self.entry_duedate = entry_duedate
         self.entry_assigned_users = entry_assigned_users
         self.entry_comments = entry_comments
         self.entry_children = entry_children
-        self.entry_parent = entry_parent
-        self.entry_timestamp = datetime.datetime.now().replace(
-            tzinfo=datetime.timezone.utc).timestamp()
         if entry_type == "note":
             self.entry_type = "info"
         if self.entry_type not in ["info", "task", "event", "started", "complete"]:
@@ -202,7 +202,7 @@ class CustomBulletEntry(BulletEntry):
                          entry_duedate, entry_assigned_users, entry_comments,
                          entry_children, entry_parent)
         self.entry_bullet_char = entry_bullet_char
-        self.entry_orig_type = entry_orig_type
+        self.entry_orig_type = entry_type
 
     def __repr__(self) -> str:
         return f"<CustomBullet {self.entry_id} created at {self.entry_timestamp}>"
@@ -218,7 +218,7 @@ class CustomBulletEntry(BulletEntry):
         """
         Boolean check if the entry is overriding the bullet character.
         """
-        return self.entry_bullet_char and self.entry_orig_type == self.entry_type
+        return self.entry_bullet_char and (self.entry_orig_type == self.entry_type)
 
     def get_JSON_payload(self):
         """
