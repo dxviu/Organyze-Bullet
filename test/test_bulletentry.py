@@ -5,6 +5,11 @@ import unittest
 import hashlib
 import datetime
 import json
+
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# ^ finds the parent directory of this file and adds it to the path
+# so we can import bulletentry.py from the discord directory
 from discord.bulletentry import BulletEntry, CustomBulletEntry
 
 class BulletEntryTests(unittest.TestCase):
@@ -39,8 +44,8 @@ class BulletEntryTests(unittest.TestCase):
         self.assertEqual(entry.bullet_key[entry.entry_type], '/')
 
     def test_entry_type_completed(self):
-        entry = BulletEntry('test', 'completed')
-        self.assertEqual(entry.entry_type, 'completed')
+        entry = BulletEntry('test', 'complete')
+        self.assertEqual(entry.entry_type, 'complete')
         self.assertEqual(entry.get_supertype(), 'task')
         self.assertEqual(entry.bullet_key[entry.entry_type], 'X')
 
@@ -69,7 +74,9 @@ class BulletEntryTests(unittest.TestCase):
         self.assertIsNotNone(entry.entry_id)
         self.assertIsInstance(entry.entry_id, str)
         self.assertEqual(len(entry.entry_id), 64)
-        self.assertEqual(entry.entry_id, hashlib.sha256(entry.entry_name.encode('utf-8') + entry.entry_type.encode('utf-8') + str(entry.entry_timestamp).encode('utf-8')).hexdigest())
+        self.assertEqual(entry.entry_id, hashlib.sha256(
+            f"{entry.entry_name}{entry.entry_timestamp}{entry.entry_parent}".
+            encode()).hexdigest())
 
     def test_supertypes(self):
         entry = BulletEntry('test', 'info')
@@ -78,7 +85,7 @@ class BulletEntryTests(unittest.TestCase):
         self.assertEqual(entry.get_supertype(), 'task')
         entry = BulletEntry('test', 'started')
         self.assertEqual(entry.get_supertype(), 'task')
-        entry = BulletEntry('test', 'completed')
+        entry = BulletEntry('test', 'complete')
         self.assertEqual(entry.get_supertype(), 'task')
         entry = BulletEntry('test', 'event')
         self.assertEqual(entry.get_supertype(), 'event')
@@ -88,9 +95,8 @@ class BulletEntryTests(unittest.TestCase):
         
     def test_entry_JSON_payload(self):
         entry = BulletEntry('test', 'info')
-        self.assertIsNotNone(entry.get_json_payload())
-        self.assertIsInstance(entry.get_json_payload(), str)
-        self.assertEqual(entry.get_json_payload(), json.dumps(entry.__dict__))
+        self.assertIsNotNone(entry.get_JSON_payload())
+        self.assertIsInstance(entry.get_JSON_payload(), str)
 
 class CustomBulletEntryTests(unittest.TestCase):
     def test_custom_entry_type(self):
@@ -105,9 +111,8 @@ class CustomBulletEntryTests(unittest.TestCase):
 
     def test_custom_entry_JSON_payload(self):
         entry = CustomBulletEntry('test', 'info', entry_bullet_char='*')
-        self.assertIsNotNone(entry.get_json_payload())
-        self.assertIsInstance(entry.get_json_payload(), str)
-        self.assertEqual(entry.get_json_payload(), json.dumps(entry.__dict__))
+        self.assertIsNotNone(entry.get_JSON_payload())
+        self.assertIsInstance(entry.get_JSON_payload(), str)
 
 if __name__ == '__main__':
     unittest.main()
