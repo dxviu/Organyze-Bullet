@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:organyzebullet_app/database/auth.dart';
 import 'package:organyzebullet_app/pallete.dart';
+import 'package:organyzebullet_app/screens/screens.dart';
 import 'package:organyzebullet_app/widgets/widgets.dart';
 import 'dart:ui';
 import 'package:flutter/services.dart';
@@ -11,8 +14,16 @@ import 'package:firebase_core/firebase_core.dart';
 class LoginScreen extends StatelessWidget {
   loginAuth auth = new loginAuth();
 
+  final _database = FirebaseDatabase.instance.reference();
+
   @override
   Widget build(BuildContext context) {
+
+    if(FirebaseAuth.instance.currentUser?.uid != null){
+      print ("User is:");
+      print(FirebaseAuth.instance.currentUser!.uid);
+      Navigator.pushNamed(context, "viewNotebooks");
+    }
 
     final usero = TextEditingController();
     final emailo = TextEditingController();

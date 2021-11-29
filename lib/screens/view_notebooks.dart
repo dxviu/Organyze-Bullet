@@ -18,6 +18,11 @@ class viewNotebooks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    if(FirebaseAuth.instance.currentUser?.uid != null){
+      print ("User is:");
+      print(FirebaseAuth.instance.currentUser!.uid);
+    }
     //final ID = ModalRoute.of(context)!.settings.arguments as String;
     print('Users/$ID/Notebooks/');
     return Scaffold(
@@ -36,7 +41,7 @@ class viewNotebooks extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.search), onPressed: () {  },
+            icon: Icon(Icons.settings), onPressed: () => Navigator.pushNamed(context, 'settings-screen'),
             //onPressed: () {showSearch(context: context, delegate: SearchBar());},
           ),
           SizedBox(height: 25,)

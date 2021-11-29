@@ -12,8 +12,15 @@ class viewEntries extends StatelessWidget{
   // final controller = Get.put(NoteController());
   final _database = FirebaseDatabase.instance.reference();
   final String ID = "-test"; //FirebaseAuth.instance.currentUser?.uid ?? "-test";
+
   @override
   Widget build(BuildContext context) {
+
+    if(FirebaseAuth.instance.currentUser?.uid != null){
+      print ("User is:");
+      print(FirebaseAuth.instance.currentUser!.uid);
+    }
+    else {print("null user");}
     final notebookName = ModalRoute.of(context)!.settings.arguments as String;
     final String path = 'Users/$ID/Notebooks/$notebookName/entries/';
     return Scaffold(
@@ -32,7 +39,7 @@ class viewEntries extends StatelessWidget{
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.search), onPressed: () {},
+            icon: Icon(Icons.settings), onPressed: () {},
             //onPressed: () {showSearch(context: context, delegate: SearchBar());},
           ),
           SizedBox(
@@ -75,6 +82,7 @@ class viewEntries extends StatelessWidget{
             // }
             //);
           }),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           //Get.to(AddNewNotePage());
@@ -84,6 +92,8 @@ class viewEntries extends StatelessWidget{
           Icons.add,
         ),
       ),
+
+
     );
   }
 }

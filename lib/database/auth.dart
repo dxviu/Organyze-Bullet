@@ -100,8 +100,13 @@ class auth {
     else return "no uid";
   }
 
-  Future <void> signoutEmail() async {
-    await FirebaseAuth.instance.signOut();
+  void signoutEmail() {
+     FirebaseAuth.instance.signOut();
   } // untested
+
+  bool checkNullUser(){
+    if(FirebaseAuth.instance.currentUser != null){return false;}else{return true;}
+  }
+
 }
 
