@@ -219,17 +219,20 @@ async def remind(ctx, time, *, task_id):
 
 @bot.command()
 async def test(ctx, members: commands.Greedy[nextcord.Member]):
+  
     await ctx.send("enter time")
-    time = await bot.wait_for('message')
-
+    user_input_time = await bot.wait_for('message')
+    
+    time_string = user_input_time.content
+    
     await ctx.send("enter id")
     id = await bot.wait_for('message')
-
-    notify = notification(time, id)
     
 
-    members = ", ".join(x.mention for x in members)
+    notify = notification(str(time_string), id)
+    seconds = notify.discord_notification()
 
+    members = ", ".join(x.mention for x in members)
 
     async with aiohttp.ClientSession() as session:
         target_ref = f"{db_ref[:-5]}/{id.content}.json"
@@ -237,23 +240,13 @@ async def test(ctx, members: commands.Greedy[nextcord.Member]):
             if r.status == 200:
                 server_json = await r.json()
                 task_description = server_json["name"]
-                # await ctx.send(f"found the {task_description}.")
             else:
                 ctx.send(f"{id.content} does not exist on the server.")
 
-            #converted_time = convert(time.content)
-
-            #if converted_time == -1:
-            #await ctx.send("Error. You did not enter the time correctly.")
-            #retur n
-
-            #if converted_time == -2:
-            #await ctx.send("Error, the time must be an integer.")
-
-            response = f"{notify.time.content} reminder set for **{task_description}**."
+            response = f"Reminder set on **{time_string}**  for **{task_description}**."
             await ctx.send(response)
-            await ctx.send(f"remaining seconds until task {notify.seconds_until_notification.content}")
-            await asyncio.sleep(notify)
+            await ctx.send(f"{seconds} seconds remaining until task ")
+            await asyncio.sleep(seconds)
             await ctx.send('{} this is the reminder for {}'.format(members, task_description))
             
 

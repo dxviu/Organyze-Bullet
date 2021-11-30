@@ -1,4 +1,6 @@
-from datetime import datetime
+import datetime
+from datetime import timezone
+import time
 from dateutil import parser, tz
 
 
@@ -26,35 +28,40 @@ class notification:
         self.task_id = task_id
         self.target = target
       
-    def get_time(self, time: float):
-        parsed_time = parser.parse(time)
+    def get_time(self):
+        parsed_time = parser.parse(self.time)
         parsed_time = parsed_time.replace(
-        tzinfo=datetime.timezone.utc).timestamp()
+          tzinfo=datetime.timezone.utc).timestamp()
     
         return parsed_time
+    
 
-    def calculate_time_difference(self):        
-        currentTimestamp = self.time.time()            #time and current time (UTC). This will be used for the                                                              asyncio.sleep method found in the notify method
-        timeDelta = self.time - currentTimestamp  
-        return timeDelta
+    def calculate_time_delta(self):
+        user_input_timestamp = self.get_time()
+        current_timestamp = self.current_timestamp()
+              
+        time_delta_in_seconds = user_input_timestamp - current_timestamp
 
-    def convert_time(self, date: float):
-      #will input date/time from user and return readable date time
-      date_stamp = parser.parse(date)
-      return date_stamp
+        return time_delta_in_seconds
+      
 
-    def current_datetime(self):
-        timestamp = self.time.time()       
-        date_time = datetime.fromtimestamp(timestamp)
-        return date_time
+    def current_timestamp(self):
+        now = datetime.datetime.now()
+        timestampStr = now.strftime("%c")
+        parsed_time = parser.parse(timestampStr)
+        parsed_time = parsed_time.replace(
+          tzinfo=datetime.timezone.utc).timestamp()
+        return parsed_time
+        
+    
+
+    def discord_notification(self):
+      seconds = self.calculate_time_delta()
+      return seconds
 
 
-    def notify(self, time: float, task_id: str, target: list=None):
-        notification_timestamp = self.get_time(time)                       
-        seconds_until_notification = self.calculate_time_difference()
 
-        if target is None:
-            return seconds_until_notification
+  
       
 
     
