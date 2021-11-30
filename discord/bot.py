@@ -185,6 +185,29 @@ async def set_status(ctx, e_id: str, entry_type: str):
 Syntax: `o!status <entryID> <entryType>`
 Entries can be one of the following: info, task, event, started, complete.""")
 
+@bot.command(name="info")
+async def get_info(ctx, e_id: str):
+    async with aiohttp.ClientSession() as session:
+        target_ref = f"{db_ref[:-5]}/{e_id}.json"
+        async with session.get(target_ref) as r:
+            if r.status == 200:
+                server_json = await r.json()
+                response = f"Details for {e_id}:\n"
+                if 'bullet_char' in server_json.keys():
+                    response += f"{server_json['bullet_char']} "
+                else:
+                    response += f"{bullet_key[server_json['type']]} "
+                response = f"{server_json['name']}\n"
+                response += f"Description: {server_json['description'] if 'description' in server_json.keys() else 'None'}\n"
+                if 'due_date' in server_json.keys():
+                    response += f"Due: {datetime.datetime.fromtimestamp(server_json['due_date']).strftime('%Y-%m-%d %H:%M:%S')}\n"
+                if 'assigned' in server_json.keys():
+                    response += f"Assigned to: {', '.join([str(member) for member in server_json['assigned']])}\n"
+                response += f"Created: {datetime.datetime.fromtimestamp(server_json['timestamp']).strftime('%Y-%m-%d %H:%M:%S')}\n"
+                await ctx.send(response)
+            else:
+                ctx.send(f"{e_id} does not exist on the server.")
+
 
 # naive implementation
 @bot.command(name="complete")
