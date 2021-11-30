@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:organyzebullet_app/database/auth.dart';
-import 'package:organyzebullet_app/database/message_dao.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,7 @@ class CreateNewAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int idNumo = 1;
-    String createErrString;
+    String createErrString ="";
     int createErrCode = 0; // zero is no error at all, 1 is the password is too low, 2 is the email is already registers
     //final account = database.child('UID/');
     final usero = TextEditingController();
@@ -32,10 +31,10 @@ class CreateNewAccount extends StatelessWidget {
     final passwordchecko = TextEditingController();
 
 
-    usero.addListener(() => print('first text field: ${usero.text}'));
-    emailo.addListener(() => print('second text field: ${emailo.text}'));
-    passwordo.addListener(() => print('password text field: ${passwordo.text}'));
-    passwordchecko.addListener(() => print('check text field: ${passwordchecko.text}'));
+    usero.addListener(() => {"one"});
+    emailo.addListener(() => {"one"});
+    passwordo.addListener(() => {"one"});
+    passwordchecko.addListener(() => {"one"});
 
     Size size = MediaQuery.of(context).size;
     return Stack(
@@ -117,16 +116,21 @@ class CreateNewAccount extends StatelessWidget {
                     PasswordInput(
                       icon: FontAwesomeIcons.lock,
                       hint: 'Confirm Password',
-                      inputAction: TextInputAction.done,
+                      inputAction: TextInputAction.next,
                       myController: passwordchecko,
                     ),
                     SizedBox(
-                      height: 25,
+                      height: 10,
                     ),
+                    Text(
+                      createErrString,
+                    ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   ElevatedButton(
                     onPressed: () => {
-                      idNumo =0,
-                      createErrString = createUserWError(usero.text, emailo.text, passwordo.text, passwordchecko.text)
+                      createErrString = createUserWError(usero.text, emailo.text, passwordo.text, passwordchecko.text),
                     },
                     style: ElevatedButton.styleFrom(
                       shape: new RoundedRectangleBorder(
@@ -176,21 +180,20 @@ class CreateNewAccount extends StatelessWidget {
   }
 
   //uses auth
-  String createUserWError(String User, String emailInput,String passwordInput,String confirmedPassword) {
-    String createErrString = "";
-    String ?_id = "";
-    if (passwordInput == confirmedPassword) {
-      createErrString = auth.createUser(emailInput, passwordInput);
-      auth.verifyEmail();
-      if (FirebaseAuth.instance.currentUser?.uid != null){_id = FirebaseAuth.instance.currentUser!.uid;}
-      else{return "uid is null";}
-      _sendMessage(User, _id, emailInput);
+    String createUserWError(String User, String emailInput,String passwordInput,String confirmedPassword) {
+      String createErrString = "";
+      String ?_id = "";
+      if (passwordInput == confirmedPassword) {
+        createErrString = auth.createUser(emailInput, passwordInput);
+        print(1);
+        print(auth.getCurrentUserID());
+        auth.sendverificationEmailWOChecking();
+      }
+      else{
+        createErrString = "Passwords are not the same";
+      }
+      return createErrString;
     }
-    else{
-      createErrString = "Passwords are not the same";
-    }
-    return createErrString;
-  }
 
   void _sendMessage(String nameWrite,String idNum, String emailWrite) {
     if (_canSendMessage()) {

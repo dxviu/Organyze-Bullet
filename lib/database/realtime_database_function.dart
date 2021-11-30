@@ -17,7 +17,7 @@ class realtime {
     final account = _database.child('Users/');
     account.update({
       ID: {
-        'Username': username, 'id': ID, 'Email': email, 'Notebooks': "none"//doesnt create 'Notebooks'
+        'Username': username, 'id': ID, 'Email': email
       }
     }
     ).then((_) => print("Has been added"))

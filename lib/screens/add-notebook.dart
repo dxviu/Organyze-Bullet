@@ -12,7 +12,7 @@ class AddNewNotebook extends StatelessWidget {
   //final NoteController controller = Get.find();
   //final _database = FirebaseDatabase.instance.reference();
   realtime r = new realtime();
-  final ID = "-test";//FirebaseAuth.instance.currentUser?.uid ?? "test";
+  final ID =  "-test";//FirebaseAuth.instance.currentUser?.uid ?? "test";
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,9 @@ class AddNewNotebook extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         //onPressed: () {controller.addNoteToDatabase();},
-        onPressed: () { r.createNotebook(ID, notebookName.text); },
+        onPressed: () { r.createNotebook(ID, notebookName.text);
+        Navigator.pushNamed(context, 'viewNotebooks');
+        },
         child: Icon(
           Icons.check,
         ),

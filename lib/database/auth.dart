@@ -27,10 +27,10 @@ class auth {
         return ('The account already exists for that email.');
       }
     } catch (e) {
-      print(e);
-      return ('Account Created');
+      //print(e);
+      return ("other error");
     }
-    return ('');
+    return ('Account-Created');
   }
 
 
@@ -58,7 +58,8 @@ class auth {
       print("testing error catch");
     }
     print("signed in");
-    return err;
+    print(err);
+    return "signed-in";
   }
 
 
@@ -83,12 +84,13 @@ class auth {
 
   int verifyEmailtoLogin() {
     User? user = FirebaseAuth.instance.currentUser;
-    if (user != null && !user.emailVerified) {
-      print("Email is not verified");
-      return 1;
+    if (user != null && user.emailVerified) {
+      return 0;
+
     }
     else {
-      return 0;
+      print("Email is not verified");
+      return 1;
     }
   }//this function is only meant to be used for the login scree, might be better in a abtract class but this is easier to do
 
@@ -107,6 +109,7 @@ class auth {
   bool checkNullUser(){
     if(FirebaseAuth.instance.currentUser != null){return false;}else{return true;}
   }
+
 
 }
 

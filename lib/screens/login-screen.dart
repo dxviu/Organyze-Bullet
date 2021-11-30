@@ -9,6 +9,7 @@ import 'package:organyzebullet_app/widgets/widgets.dart';
 import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:organyzebullet_app/database/realtime_database_function.dart';
 
 
 class LoginScreen extends StatelessWidget {
@@ -16,14 +17,11 @@ class LoginScreen extends StatelessWidget {
 
   final _database = FirebaseDatabase.instance.reference();
 
+
+
   @override
   Widget build(BuildContext context) {
 
-    if(FirebaseAuth.instance.currentUser?.uid != null){
-      print ("User is:");
-      print(FirebaseAuth.instance.currentUser!.uid);
-      Navigator.pushNamed(context, "viewNotebooks");
-    }
 
     final usero = TextEditingController();
     final emailo = TextEditingController();
@@ -93,10 +91,10 @@ class LoginScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: ()  {
                         //print(auth.signInEmail(emailo.text, passwordo.text) as String);
-                        if (auth.signInEmail(emailo.text, passwordo.text) == 'Account-Created') {
+                        if (auth.signInEmail(emailo.text, passwordo.text) == 'signed-in') {
                                         if (auth.verifyEmailtoLogin() == 0) {
-                                         // String ID = auth.getCurrentUserID();
-                                          print("test");
+                                         realtime().createUser(auth.getCurrentUserID(), "username-placeholder", emailo.text);
+                                          print("verified email");
                                           Navigator.pushNamed(context,
                                               'viewNotebooks');
                                         }

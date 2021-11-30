@@ -11,7 +11,7 @@ import 'package:organyzebullet_app/database/dataModels.dart';
 class viewEntries extends StatelessWidget{
   // final controller = Get.put(NoteController());
   final _database = FirebaseDatabase.instance.reference();
-  final String ID = "-test"; //FirebaseAuth.instance.currentUser?.uid ?? "-test";
+  final String ID = "-test";//FirebaseAuth.instance.currentUser?.uid ?? "-test";
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class viewEntries extends StatelessWidget{
       appBar: AppBar(
         brightness: Brightness.light,
         title: Text(
-          "Notebooks",
+          "Entries",
           style: TextStyle(
             color: Colors.black,
           ),
@@ -39,7 +39,7 @@ class viewEntries extends StatelessWidget{
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.settings), onPressed: () {},
+            icon: Icon(Icons.settings), onPressed: () =>Navigator.pushNamed(context, 'settings-screen'),
             //onPressed: () {showSearch(context: context, delegate: SearchBar());},
           ),
           SizedBox(
@@ -61,9 +61,12 @@ class viewEntries extends StatelessWidget{
                         String eUID = nextEntry.UID;
                         _database.child("$path$eUID").remove();
                         },
-                      leading: Text(nextEntry.date), //or icon
+
+                      trailing: Text(nextEntry.date), //or icon
                       title: Text(nextEntry.entryName),
-                      subtitle: Text(nextEntry.description));
+                      subtitle: Text(nextEntry.description),
+                      leading: Icon(setIcon(nextEntry.entryType))
+                  );
                 }),
               );
             } else {
@@ -95,6 +98,14 @@ class viewEntries extends StatelessWidget{
 
 
     );
+
+  }
+  IconData setIcon(String type) {
+    IconData icon = CupertinoIcons.rectangle_fill_badge_xmark;
+    if (type == "task"){icon = CupertinoIcons.circle;}
+    else if(type == "complete"){icon = CupertinoIcons.xmark;}
+    else if(type == "event"){icon = CupertinoIcons.circle_filled;}
+    return icon;
   }
 }
 

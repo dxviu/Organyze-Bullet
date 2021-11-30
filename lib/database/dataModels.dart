@@ -43,13 +43,9 @@ class notebookModel{
 
   factory notebookModel.fromRTDB(Map<String,dynamic> data){
     return notebookModel(
-        notebookName: data['notebookname'] as String,
-        notebookID: data['notebookID'] as String
+        notebookID: data['notebookID'] ?? "Null notebookID" as String,
+        notebookName: data['notebookname'] ?? "Null Notebookname" as String,
     );
-  }
-
-  String getNotebookName(){
-    return this.notebookName;
   }
 
 }

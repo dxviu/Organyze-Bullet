@@ -6,19 +6,18 @@ import 'package:organyzebullet_app/database/realtime_database_function.dart';
 class notebookListPublisher {
   final _database = FirebaseDatabase.instance.reference();
 
-  Stream<List<notebookModel>> getNotebookList(String ID){
-    final orderStream = _database.child('Users/-test/Notebooks/').onValue;
+  Stream<List<notebookModel>> getNotebookList(String path){
+    final orderStream = _database.child(path).onValue;
     final streamToPublish = orderStream.map((event) {
       final orderMap = Map<String,dynamic>.from(event.snapshot.value);
-      final notebookList = orderMap.entries.map((element)  {
+      final orderList = orderMap.entries.map((element)  {
         return notebookModel.fromRTDB(Map<String,dynamic>.from(element.value));
       }).toList();
-      return notebookList;
+      return orderList;
     });
     return streamToPublish;
   }
 }
-
 class entryStreamPublisher{
   final _database = FirebaseDatabase.instance.reference();
 
