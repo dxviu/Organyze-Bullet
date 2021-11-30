@@ -5,7 +5,22 @@ import dateutil
 from dateutil.tz import gettz
 
 tzinfos = {
-    "EDT": gettz("America/Detroit")
+    "EDT": gettz("America/New_York"),
+    "CDT": gettz("America/Chicago"),
+    "MDT": gettz("America/Denver"),
+    "PDT": gettz("America/Los_Angeles"),
+    "EST": gettz("America/New_York"),
+    "CST": gettz("America/Chicago"),
+    "MST": gettz("America/Denver"),
+    "PST": gettz("America/Los_Angeles"),
+    "Eastern Time": gettz("America/New_York"),
+    "Central Time": gettz("America/Chicago"),
+    "Mountain Time": gettz("America/Denver"),
+    "Pacific Time": gettz("America/Los_Angeles"),
+    "ET": gettz("America/New_York"),
+    "CT": gettz("America/Chicago"),
+    "MT": gettz("America/Denver"),
+    "PT": gettz("America/Los_Angeles")
 }
 
 
@@ -48,20 +63,24 @@ class BulletEntry:
                  entry_comments=None,
                  entry_children=None,
                  entry_parent=None):
+        self.entry_name = entry_name
+        self.entry_timestamp = datetime.datetime.now().replace(
+            tzinfo=datetime.timezone.utc).timestamp()
+        self.entry_parent = entry_parent
         if entry_id is None:
             self.entry_id = self.generate_id()
         else:
             self.entry_id = entry_id
-        self.entry_name = entry_name
         self.entry_type = entry_type
         self.entry_desc = entry_desc
         self.entry_duedate = entry_duedate
         self.entry_assigned_users = entry_assigned_users
         self.entry_comments = entry_comments
         self.entry_children = entry_children
-        self.entry_parent = entry_parent
-        self.entry_timestamp = datetime.datetime.now().replace(
-            tzinfo=datetime.timezone.utc).timestamp()
+        if entry_type == "note":
+            self.entry_type = "info"
+        if self.entry_type not in ["info", "task", "event", "started", "complete"]:
+            raise ValueError(f"Invalid entry type: {self.entry_type}")
 
     bullet_key = {
         "info": "-",
@@ -97,8 +116,10 @@ class BulletEntry:
             return "task"
         elif self.entry_type == "event":
             return "event"
-        else:
+        elif self.entry_type == "info":
             return "info"
+        else:
+            raise ValueError(f"Invalid entry type: {self.entry_type}")
 
     def is_task(self) -> bool:
         """Boolean check if the entry is a task."""
@@ -196,7 +217,7 @@ class CustomBulletEntry(BulletEntry):
                          entry_duedate, entry_assigned_users, entry_comments,
                          entry_children, entry_parent)
         self.entry_bullet_char = entry_bullet_char
-        self.entry_orig_type = entry_orig_type
+        self.entry_orig_type = entry_type
 
     def __repr__(self) -> str:
         return f"<CustomBullet {self.entry_id} created at {self.entry_timestamp}>"
@@ -212,7 +233,7 @@ class CustomBulletEntry(BulletEntry):
         """
         Boolean check if the entry is overriding the bullet character.
         """
-        return self.entry_bullet_char and self.entry_orig_type == self.entry_type
+        return self.entry_bullet_char and (self.entry_orig_type == self.entry_type)
 
     def get_JSON_payload(self):
         """
@@ -334,3 +355,4 @@ class BulletFactory():
                                self.entry_desc, self.entry_duedate,
                                self.entry_assigned_users, self.entry_comments,
                                self.entry_children, self.entry_parent)
+

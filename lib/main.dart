@@ -1,13 +1,14 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:organyzebullet_app/screens/home-screen.dart';
+import 'package:organyzebullet_app/database/dataModel.dart';
+import 'package:organyzebullet_app/database/userModel.dart';
 import 'screens/screens.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:organyzebullet_app/database/realtime_database_function.dart';
-import 'package:organyzebullet_app/database/dataModel.dart';
 import 'package:organyzebullet_app/database/message_dao.dart';
+import 'package:organyzebullet_app/database/userModel.dart';
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); //this is IMPORTANT to not have a null error message
+  WidgetsFlutterBinding.ensureInitialized();                         //this is IMPORTANT to not have a null error message
   await Firebase.initializeApp();
   runApp(MyApp());
 }

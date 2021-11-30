@@ -34,25 +34,48 @@ class auth {
   }
 
 
-  Future <void> signInEmail(String emailInput, String passwordInput) async {
+
+
+  String signInEmail(String emailInput, String passwordInput) {
+    String err = '';
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
+      FirebaseAuth.instance
           .signInWithEmailAndPassword(
           email: emailInput,
           password: passwordInput
       );
+      err = "Account-Created";
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
+      if (e.code == "user-not-found") {
         print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
+        err = ('No user found');
+      } else if (e.code == "wrong-password") {
         print('Wrong password provided for that user.');
+        err =  ("wrong password");
       }
+    }catch (e){
+      //print(e);
+      print("testing error catch");
     }
+    print("signed in");
+    return err;
   }
+
+
+
+
 
   Future <void> verifyEmail() async {
     User? user = await FirebaseAuth.instance.currentUser;
     if (user != null && !user.emailVerified) {
+      await user.sendEmailVerification();
+      print("sent");
+    }
+  }
+
+  Future <void> sendverificationEmailWOChecking() async {
+    User? user = await FirebaseAuth.instance.currentUser;
+    if (user != null) {
       await user.sendEmailVerification();
       print("sent");
     }
@@ -68,6 +91,14 @@ class auth {
       return 0;
     }
   }//this function is only meant to be used for the login scree, might be better in a abtract class but this is easier to do
+
+  String getCurrentUserID(){
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null && user.uid != null){
+      return user.uid as String;
+    }
+    else return "no uid";
+  }
 
   Future <void> signoutEmail() async {
     await FirebaseAuth.instance.signOut();

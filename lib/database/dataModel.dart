@@ -10,7 +10,7 @@ import 'package:firebase_database/firebase_database.dart';
 
 class oUser {
   final String username;
-  final int id;
+  final String id;
   final String email;
   final String password;
 
@@ -18,17 +18,17 @@ class oUser {
 
   oUser.fromJson(Map<dynamic, dynamic> json)
       :username = json['Username'] as String,
-       id = json['id'] as int,
+       id = json['id'] as String,
         email = json['Email'] as String,
         password = json['Password'] as String;
 
 
+
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
     'Username' : username,
-    'id': id.toString(),
+    'id': id,
     'Email':email,
-    'Password' : password
-
+    'Password' : password,
   };
 
 }
