@@ -100,7 +100,7 @@ class createFlags(commands.FlagConverter, case_insensitive=True):
     due: Optional[str]
     bullet: Optional[str]
     parent: Optional[str]
-    assigned: Optional[Tuple[nextcord.Member, ...]]
+    assigned: Tuple[nextcord.Member, ...] = commands.flag(default=lambda ctx: [])
 
 @bot.command()
 async def create(ctx, entry_type: str, *, flags: createFlags):
@@ -216,38 +216,44 @@ async def remind(ctx, time, *, task_id):
                 f"{ctx.author.mention}, this is your reminder for **{task_description}**."
             )
 
+class testFlags(commands.FlagConverter, case_insensitive=True):
+  time: str
+  assigned: Tuple[nextcord.Member, ...]
 
 @bot.command()
-async def test(ctx, members: commands.Greedy[nextcord.Member]):
-  
-    await ctx.send("enter time")
-    user_input_time = await bot.wait_for('message')
+async def test(ctx, task_id: str, *, flags: testFlags):
+    # Usage: o! <taskID> time: <time> assigned: <mentions>
+    #await ctx.send("enter time")
+    #user_input_time = await bot.wait_for('message')
     
-    time_string = user_input_time.content
+    #time_string = user_input_time.content
     
-    await ctx.send("enter id")
-    id = await bot.wait_for('message')
+    #await ctx.send("enter id")
+    #id = await bot.wait_for('message')
     
+    flag_notify = notification(flags.time, task_id, flags.assigned)
+    seconds = flag_notify.discord_notification()
+    payload = flag_notify.get_JSON_payload()
+    #notify = notification(str(time_string), id)
+    #seconds = notify.discord_notification()
 
-    notify = notification(str(time_string), id)
-    seconds = notify.discord_notification()
-
-    members = ", ".join(x.mention for x in members)
-
+    members = ", ".join(str(member) for member in flags.assigned)
+    #members = ", ".join(members.mention for x in members)
+    await ctx.send(f"list of members: {members}")
     async with aiohttp.ClientSession() as session:
-        target_ref = f"{db_ref[:-5]}/{id.content}.json"
-        async with session.get(target_ref) as r:
+        target_ref = f"{db_ref[:-5]}/{task_id}.json"
+        async with session.get(target_ref, data = payload) as r:
             if r.status == 200:
                 server_json = await r.json()
                 task_description = server_json["name"]
             else:
                 ctx.send(f"{id.content} does not exist on the server.")
 
-            response = f"Reminder set on **{time_string}**  for **{task_description}**."
+            response = f"Reminder set on **{flags.time}**  for **{task_description}**."
             await ctx.send(response)
             await ctx.send(f"{seconds} seconds remaining until task ")
             await asyncio.sleep(seconds)
-            await ctx.send('{} this is the reminder for {}'.format(members, task_description))
+            #await ctx.send('{} this is the reminder for {}'.format(members, task_description))
             
 
 
@@ -309,5 +315,15 @@ def convert(time):
 
     return user_input * time_dict[unit]  #returns reminder time
 
+class test2Flags(commands.FlagConverter, case_insensitive=True):
+  assigned: Tuple[nextcord.Member, ...] = commands.flag(default=lambda ctx: [])
+  test: str
+  days: int = 1
+
+@bot.command()
+async def test2(ctx, *, flags: test2Flags):
+    members = ', '.join(str(member) for member in flags.assigned)
+    plural = f'{flags.days} times' if flags.days != 1 else f'{flags.days} time'
+    await ctx.send(f'Test: {members} for {flags.test!r} (number {plural})')
 
 bot.run(token)

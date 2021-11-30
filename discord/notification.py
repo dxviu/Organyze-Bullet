@@ -2,7 +2,7 @@ import datetime
 from datetime import timezone
 import time
 from dateutil import parser, tz
-
+import json
 
 class notification:
     """
@@ -37,7 +37,7 @@ class notification:
     
 
     def calculate_time_delta(self):
-        user_input_timestamp = self.get_time()
+        user_input_timestamp = self.get_time() 
         current_timestamp = self.current_timestamp()
               
         time_delta_in_seconds = user_input_timestamp - current_timestamp
@@ -53,12 +53,23 @@ class notification:
           tzinfo=datetime.timezone.utc).timestamp()
         return parsed_time
         
-    
 
     def discord_notification(self):
       seconds = self.calculate_time_delta()
       return seconds
 
+    def get_JSON_payload(self):
+        """
+        Get the JSON payload for the BulletEntry object.
+        :return: The JSON payload.
+        :rtype: dict
+        """
+        payload = {
+            "entry_id": self.task_id
+        }
+        return json.dumps(payload)
+
+    
 
 
   
