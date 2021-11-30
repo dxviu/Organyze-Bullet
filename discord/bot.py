@@ -195,7 +195,7 @@ async def get_info(ctx, e_id: str):
                     response += f"{server_json['bullet_char']} "
                 else:
                     response += f"{bullet_key[server_json['type']]} "
-                response = f"{server_json['name']}\n"
+                response += f"{server_json['name']}\n"
                 response += f"Description: {server_json['description'] if 'description' in server_json.keys() else 'None'}\n"
                 if 'due_date' in server_json.keys():
                     response += f"Due: {datetime.datetime.fromtimestamp(server_json['due_date']).strftime('%Y-%m-%d %H:%M:%S')}\n"
