@@ -91,11 +91,9 @@ async def help(ctx):
         name='o! info <ID>',
         value="Display information about an entry. More Info: `o! help info`.",
         inline=False)
-    await ctx.send(embed=e)
     e.add_field(name='o! help',
                 value="Display the Command list.",
                 inline=False)
-
     await ctx.send(embed=e)
 
 class createFlags(commands.FlagConverter, case_insensitive=True):
