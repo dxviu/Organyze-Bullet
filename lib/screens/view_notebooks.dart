@@ -55,10 +55,14 @@ class viewNotebooks extends StatelessWidget {
           stream: _database.child('Users/$ID/Notebooks/').onValue,
           builder: (context, snapshot) {
             final tilesList = <ListTile>[];
-            if(snapshot.hasData) {
+            print(00);
+            if(snapshot.hasData){
               final notebookList = Map<String,dynamic>.from((snapshot.data! as Event).snapshot.value);
+              print(11);
               notebookList.forEach((key, value) {
+                print(22);
                 final nextNotebook = Map<String,dynamic>.from(value);
+                print(33);
                 final orderTile = ListTile(
                     leading: Icon(Icons.list),
                     onLongPress: () {
@@ -84,10 +88,20 @@ class viewNotebooks extends StatelessWidget {
             //ListView.builder(
             //   itemCount: 5,
             //  itemBuilder: (BuildContext context, int index) {
-            return
-              ListView(
-                children: tilesList,
+            if (tilesList.isNotEmpty) {
+              print(0);
+              return
+                ListView(
+                  children: tilesList,
+                );
+            }
+            else {
+              print(1);
+              return ListTile(
+                  leading: Icon(Icons.list),
+                  title: Text("No Notebook Created")
               );
+            }
             // }
             //);
           }

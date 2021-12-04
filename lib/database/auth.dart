@@ -13,7 +13,7 @@ class auth {
     FirebaseAuth.instance.signInAnonymously();
   }
 
-  String createUser(String emailInput, String passwordInput) {
+  String createAuthUser(String emailInput, String passwordInput) {
     try {
     FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailInput,

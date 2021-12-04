@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:organyzebullet_app/database/auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -153,6 +154,20 @@ class CreateNewAccount extends StatelessWidget {
                         "Create Account"
                     ),
                   ),
+                    ElevatedButton(
+                      onPressed: () async{
+                        await authAndRealtime().createGoogleAccount(usero.text);
+                        Navigator.pushNamed(context, 'viewNotebooks');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(16.0),
+                        ),
+                      ),
+                      child: Text(
+                          "Create Account With Google"
+                      ),
+                    ),
                     SizedBox(
                       height: 30,
                       child: Text(createErrString),
@@ -197,7 +212,7 @@ class CreateNewAccount extends StatelessWidget {
       String createErrString = "";
       String ?_id = "";
       if (passwordInput == confirmedPassword) {
-        createErrString = auth.createUser(emailInput, passwordInput);
+        createErrString = auth.createAuthUser(emailInput, passwordInput);
           print(1);
           print(auth.getCurrentUserID());
           auth.sendverificationEmailWOChecking();
@@ -219,6 +234,31 @@ class CreateNewAccount extends StatelessWidget {
   bool _canSendMessage() => true;
 }
 
-class authCreateAcc extends auth{}
+class authCreateAcc extends auth{
 
+
+}
+
+class authAndRealtime extends auth with realtime {
+
+  Future<void> createGoogleAccount(String userName) async {
+    //Logs in user.. can be used for creating a user just needs a user name
+    // Trigger the Google Authentication flow.
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    // Obtain the auth details from the request.
+    final GoogleSignInAuthentication googleAuth = await googleUser!
+        .authentication;
+    // Create a new credential.
+    final AuthCredential googleCredential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    // Sign in to Firebase with the Google [UserCredential].
+    final UserCredential googleUserCredential =
+    await FirebaseAuth.instance.signInWithCredential(googleCredential);
+
+    //create user for rtdb
+    realtime().createUser(googleUser.id, userName, googleUser.email);
+  }
+}
 
