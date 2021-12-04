@@ -88,12 +88,13 @@ class LoginScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                     color: Colors.brown,
                   ),
-                    child: ElevatedButton(
+                    child: Row(
+                    children: <Widget>[
+                    ElevatedButton(
                       onPressed: ()  {
                         //print(auth.signInEmail(emailo.text, passwordo.text) as String);
                         if (auth.signInEmail(emailo.text, passwordo.text) == 'signed-in') {
                                         if (auth.verifyEmailtoLogin() == 0) {
-                                         realtime().createUser(auth.getCurrentUserID(), "username-placeholder", emailo.text);
                                           print("verified email");
                                           Navigator.pushNamed(context,
                                               'viewNotebooks');
@@ -118,6 +119,20 @@ class LoginScreen extends StatelessWidget {
                           kBodyText.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
+                      ElevatedButton(
+                          onPressed: () async {
+                            await auth.signInWithGoogle();
+                            Navigator.pushNamed(context,
+                                'viewNotebooks');
+                          },
+                          child: Text(
+                            "Login with Google",
+                            style:
+                            kBodyText.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                      )
+                    ]
+                    ),
                   ),
                   SizedBox(
                     height: 25,

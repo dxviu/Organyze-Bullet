@@ -26,7 +26,7 @@ class viewEntries extends StatelessWidget{
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.light,
-        title: Text(
+        title: const Text(
           "Entries",
           style: TextStyle(
             color: Colors.black,
@@ -34,7 +34,7 @@ class viewEntries extends StatelessWidget{
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.black,
         ),
         actions: [
@@ -42,7 +42,7 @@ class viewEntries extends StatelessWidget{
             icon: Icon(Icons.settings), onPressed: () =>Navigator.pushNamed(context, 'settings-screen'),
             //onPressed: () {showSearch(context: context, delegate: SearchBar());},
           ),
-          SizedBox(
+          const SizedBox(
             height: 25,
           )
         ],
@@ -79,12 +79,14 @@ class viewEntries extends StatelessWidget{
             //ListView.builder(
             //   itemCount: 5,
             //  itemBuilder: (BuildContext context, int index) {
-            return ListView(
+            return
+              ListView(
               children: tilesList,
             );
             // }
             //);
           }),
+
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {

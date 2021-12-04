@@ -30,6 +30,16 @@ class CreateNewAccount extends StatelessWidget {
     final passwordo = TextEditingController();
     final passwordchecko = TextEditingController();
 
+    FirebaseAuth.instance
+        .authStateChanges()
+        .listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in!');
+      }
+    });
+
 
     usero.addListener(() => {"one"});
     emailo.addListener(() => {"one"});
@@ -131,6 +141,8 @@ class CreateNewAccount extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () => {
                       createErrString = createUserWError(usero.text, emailo.text, passwordo.text, passwordchecko.text),
+                      _sendMessage(usero.text, FirebaseAuth.instance.currentUser!.uid, emailo.text),
+                      Navigator.pushNamed(context, 'viewNotebooks')
                     },
                     style: ElevatedButton.styleFrom(
                       shape: new RoundedRectangleBorder(
@@ -143,6 +155,7 @@ class CreateNewAccount extends StatelessWidget {
                   ),
                     SizedBox(
                       height: 30,
+                      child: Text(createErrString),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -185,9 +198,10 @@ class CreateNewAccount extends StatelessWidget {
       String ?_id = "";
       if (passwordInput == confirmedPassword) {
         createErrString = auth.createUser(emailInput, passwordInput);
-        print(1);
-        print(auth.getCurrentUserID());
-        auth.sendverificationEmailWOChecking();
+          print(1);
+          print(auth.getCurrentUserID());
+          auth.sendverificationEmailWOChecking();
+
       }
       else{
         createErrString = "Passwords are not the same";

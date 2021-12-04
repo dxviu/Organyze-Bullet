@@ -14,7 +14,7 @@ import '../pallete.dart';
 class viewNotebooks extends StatelessWidget {
  // final controller = Get.put(NoteController());
   final _database = FirebaseDatabase.instance.reference();
-  final ID = "-test"; //"FirebaseAuth.instance.currentUser?.uid ?? "-test";
+  final ID = FirebaseAuth.instance.currentUser!.uid;
 
 
   @override
