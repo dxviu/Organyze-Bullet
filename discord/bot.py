@@ -73,9 +73,8 @@ async def help(ctx):
         value=
         'Type the syntax, e.g `o! help create`, or any labeled with __More Info:__ to display more information.',
         inline=False)
-    e.add_field(name='o! create <entryType> "<description>"',
-                value="Create a new entry. More Info: `o! help create`.",
-                inline=False)
+    e.add_field(name='o! create <entryType> named: <entryName>',
+                value="Create a new entry. Flags:\n- description\n- due\n- bullet\n- assigned", inline=False)
     e.add_field(
         name='o! delete <ID>',
         value="Delete an entry by its ID. More Info: `o! help delete`.",
@@ -88,10 +87,13 @@ async def help(ctx):
         name='o! list',
         value="List all entries of a notebook. More Info: `o! help list`.",
         inline=False)
+    e.add_field(
+        name='o! info <ID>',
+        value="Display information about an entry. More Info: `o! help info`.",
+        inline=False)
     e.add_field(name='o! help',
                 value="Display the Command list.",
                 inline=False)
-
     await ctx.send(embed=e)
 
 class createFlags(commands.FlagConverter, case_insensitive=True):
@@ -180,6 +182,29 @@ async def set_status(ctx, e_id: str, entry_type: str):
         ctx.send("""Invalid format.
 Syntax: `o!status <entryID> <entryType>`
 Entries can be one of the following: info, task, event, started, complete.""")
+
+@bot.command(name="info")
+async def get_info(ctx, e_id: str):
+    async with aiohttp.ClientSession() as session:
+        target_ref = f"{db_ref[:-5]}/{e_id}.json"
+        async with session.get(target_ref) as r:
+            if r.status == 200:
+                server_json = await r.json()
+                response = f"Details for {e_id}:\n"
+                if 'bullet_char' in server_json.keys():
+                    response += f"{server_json['bullet_char']} "
+                else:
+                    response += f"{bullet_key[server_json['type']]} "
+                response += f"{server_json['name']}\n"
+                response += f"Description: {server_json['description'] if 'description' in server_json.keys() else 'None'}\n"
+                if 'due_date' in server_json.keys():
+                    response += f"Due: {datetime.datetime.fromtimestamp(server_json['due_date']).strftime('%Y-%m-%d %H:%M:%S')}\n"
+                if 'assigned' in server_json.keys():
+                    response += f"Assigned to: {', '.join([str(member) for member in server_json['assigned']])}\n"
+                response += f"Created: {datetime.datetime.fromtimestamp(server_json['timestamp']).strftime('%Y-%m-%d %H:%M:%S')}\n"
+                await ctx.send(response)
+            else:
+                ctx.send(f"{e_id} does not exist on the server.")
 
 
 # naive implementation
