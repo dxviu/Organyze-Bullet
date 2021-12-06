@@ -1,24 +1,35 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:organyzebullet_app/screens/home-screen.dart';
+import 'package:organyzebullet_app/database/dataModels.dart';
+import 'package:organyzebullet_app/database/realtime_database_function.dart';
+import 'package:organyzebullet_app/screens/add-notebook.dart';
+import 'package:organyzebullet_app/screens/view_notebooks.dart';
 import 'screens/screens.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:organyzebullet_app/database/realtime_database_function.dart';
-import 'package:organyzebullet_app/database/dataModel.dart';
-import 'package:organyzebullet_app/database/message_dao.dart';
+import 'package:organyzebullet_app/database/dataModels.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:organyzebullet_app/database/auth.dart';
 void main() async {
-  //await Firebase.initializeApp();
-  //dbfunc oz = new dbfunc();
-  //oz.createUser(2, 'username', 'email@email.com', 'password1');
-  print("message");
-  WidgetsFlutterBinding.ensureInitialized(); //this is IMPORTANT to not have a null error message
+  WidgetsFlutterBinding.ensureInitialized();                         //this is IMPORTANT to not have a null error message
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
+
   @override
   Widget build(BuildContext context) {
+    String initRoute = '/';
+    if (FirebaseAuth.instance.currentUser !=null && (FirebaseAuth.instance.currentUser?.emailVerified == true)){
+        initRoute = 'viewNotebooks';
+    }
+    else{
+        initRoute = '/';
+    }
+
     return MaterialApp(
       title: 'Organyze Bullet',
       theme: ThemeData(
@@ -27,13 +38,25 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.brown,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/',
+      initialRoute: initRoute,
       routes: {
         '/': (context) => LoginScreen(),
         'ForgotPassword': (context) => ForgotPassword(),
         'CreateNewAccount': (context) => CreateNewAccount(),
-        //'HomeScreen': (context) => HomeScreen(),
+        'AddNewEntry': (context) => AddNewEntry(),
+        'viewEntries': (context) => viewEntries(),
+        'viewNotebooks':(context) => viewNotebooks(),
+        'AddNewNotebook':(context) => AddNewNotebook(),
+        'settings-screen':(context) => Settings(),
       },
+
     );
+
+
+
   }
+
+
+
+
 }
