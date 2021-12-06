@@ -16,7 +16,6 @@ class viewNotebooks extends StatelessWidget {
   final _database = FirebaseDatabase.instance.reference();
   final ID = FirebaseAuth.instance.currentUser!.uid;
 
-
   @override
   Widget build(BuildContext context) {
 
@@ -52,11 +51,11 @@ class viewNotebooks extends StatelessWidget {
         ],
       ),
       body: StreamBuilder(
-          stream: _database.child('Users/$ID/Notebooks/').onValue,
+          stream: _database.child(path).onValue,
           builder: (context, snapshot) {
             final tilesList = <ListTile>[];
             print(00);
-            if(snapshot.hasData){
+            if(snapshot.hasError == false){
               final notebookList = Map<String,dynamic>.from((snapshot.data! as Event).snapshot.value);
               print(11);
               notebookList.forEach((key, value) {
@@ -66,8 +65,16 @@ class viewNotebooks extends StatelessWidget {
                 final orderTile = ListTile(
                     leading: Icon(Icons.list),
                     onLongPress: () {
-                      String notebooknameD = nextNotebook['notebookname'];
-                      _database.child('Users/$ID/Notebooks/$notebooknameD/').remove();
+                      print(tilesList.length);
+                      print("notebookLenght");
+                      if(tilesList.length == 1){
+                        print("Cant delete this notebook");
+                      }
+                      else {
+                        String notebooknameD = nextNotebook['notebookname'];
+                        _database.child('Users/$ID/Notebooks/$notebooknameD/')
+                            .remove();
+                      }
                     },
                     onTap: () {
                       String notebooknameB = nextNotebook['notebookname'];
@@ -88,20 +95,10 @@ class viewNotebooks extends StatelessWidget {
             //ListView.builder(
             //   itemCount: 5,
             //  itemBuilder: (BuildContext context, int index) {
-            if (tilesList.isNotEmpty) {
-              print(0);
               return
                 ListView(
                   children: tilesList,
                 );
-            }
-            else {
-              print(1);
-              return ListTile(
-                  leading: Icon(Icons.list),
-                  title: Text("No Notebook Created")
-              );
-            }
             // }
             //);
           }
@@ -116,5 +113,22 @@ class viewNotebooks extends StatelessWidget {
         ),
       ),
     );
+
+
   }
+  String nullNotebookPathCheck(String id){
+    if(_database.child('Users/$id/Notebooks/').onValue != null){
+      return 'Users/$id/Notebooks/';
+    }
+    else{
+      return 'Users/nullPlacer/Notebooks';
+    }
+
+  }
+
+
+  final Map<String, dynamic> nullSafeMap = {
+      "notebookName": "no notebooks available",
+      "notebookID": 2,
+  };
 }

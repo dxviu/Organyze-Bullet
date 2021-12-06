@@ -17,7 +17,13 @@ class realtime {
     final account = _database.child('Users/');
     account.update({
       ID: {
-        'Username': username, 'id': ID, 'Email': email
+        'Username': username, 'id': ID, 'Email': email, "Notebooks": {
+          "newNotebook":
+          {
+            "notebookname": "newNotebook",
+            "notebookID": 2
+          }
+        }
       }
     }
     ).then((_) => print("Has been added"))
@@ -61,6 +67,7 @@ class realtime {
         length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))))
     );
   }
+
 
 
 }

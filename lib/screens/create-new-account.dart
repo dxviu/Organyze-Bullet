@@ -140,10 +140,10 @@ class CreateNewAccount extends StatelessWidget {
                     height: 10,
                   ),
                   ElevatedButton(
-                    onPressed: () => {
-                      createErrString = createUserWError(usero.text, emailo.text, passwordo.text, passwordchecko.text),
-                      _sendMessage(usero.text, FirebaseAuth.instance.currentUser!.uid, emailo.text),
-                      Navigator.pushNamed(context, 'viewNotebooks')
+                    onPressed: ()  async {
+                      createErrString = await createUserWError(usero.text, emailo.text, passwordo.text, passwordchecko.text);
+                      _sendMessage(usero.text, FirebaseAuth.instance.currentUser!.uid, emailo.text);
+                      Navigator.pushNamed(context, 'viewNotebooks');
                     },
                     style: ElevatedButton.styleFrom(
                       shape: new RoundedRectangleBorder(
@@ -258,7 +258,7 @@ class authAndRealtime extends auth with realtime {
     await FirebaseAuth.instance.signInWithCredential(googleCredential);
 
     //create user for rtdb
-    realtime().createUser(googleUser.id, userName, googleUser.email);
+    realtime().createUser(FirebaseAuth.instance.currentUser!.uid, userName, googleUser.email);
   }
 }
 

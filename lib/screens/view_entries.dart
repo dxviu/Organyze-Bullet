@@ -73,7 +73,7 @@ class viewEntries extends StatelessWidget{
               tilesList.add(
                 ListTile(
                   leading: Icon(Icons.list),
-                  title: Text("No Notebook Created"))
+                  title: Text("No Entry Created"))
               );
             }
             //ListView.builder(
@@ -83,8 +83,6 @@ class viewEntries extends StatelessWidget{
               ListView(
               children: tilesList,
             );
-            // }
-            //);
           }),
 
 

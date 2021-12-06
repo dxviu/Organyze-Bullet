@@ -6,7 +6,7 @@ import 'package:organyzebullet_app/database/realtime_database_function.dart';
 class notebookListPublisher {
   final _database = FirebaseDatabase.instance.reference();
 
-  Stream<List<notebookModel>> getNotebookList(String path){
+  Stream<List<notebookModel>> getNotebookStream(String path){
     final orderStream = _database.child(path).onValue;
     final streamToPublish = orderStream.map((event) {
       final orderMap = Map<String,dynamic>.from(event.snapshot.value);
