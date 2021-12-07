@@ -12,6 +12,7 @@ class auth {
   void anon() async {
     FirebaseAuth.instance.signInAnonymously();
   }
+
   //  void main() {
   //  User? user = FirebaseAuth.instance.currentUser;
   //  String i = '';
@@ -28,6 +29,7 @@ class auth {
   //    });
   //  });
   //}
+
 
   String createAuthUser(String emailInput, String passwordInput) {
     try {

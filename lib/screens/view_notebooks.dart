@@ -127,8 +127,5 @@ class viewNotebooks extends StatelessWidget {
   }
 
 
-  final Map<String, dynamic> nullSafeMap = {
-      "notebookName": "no notebooks available",
-      "notebookID": 2,
-  };
+
 }

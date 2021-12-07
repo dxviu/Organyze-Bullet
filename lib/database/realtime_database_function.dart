@@ -49,6 +49,7 @@ class realtime {
     final String _path = 'Users/$ID/Notebooks/$notebookName/entries/';
     final account = _database.child(_path);
     final String entryID = getSHA256HASH(name);
+
     account.update({entryID: {
       "name" : name,
       "type" : type,
@@ -65,6 +66,7 @@ class realtime {
     final String _path = newPath;
     final account = _database.child(_path);
     final String entryID = getSHA256HASH(name);
+
     account.update({entryID: {
       "name" : name,
       "type" : type,
