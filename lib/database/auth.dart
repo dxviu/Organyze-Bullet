@@ -12,22 +12,6 @@ class auth {
   void anon() async {
     FirebaseAuth.instance.signInAnonymously();
   }
-    void main() {
-    User? user = FirebaseAuth.instance.currentUser;
-    String i = '';
-    String j = '';
-
-    group('Six Methods Unit Testing', () {
-      test('Load a list', () async {
-        expect(verifyEmailtoLogin(), 0);
-        expect(createUser(i, j), 'The password provided is too weak.');
-        expect(signInEmail(i, j), 'No user found');
-        expect(sendverificationEmailWOChecking(), 'sent');
-        expect(verifyEmail(), 'sent');
-        expect(getCurrentUserID(), 'no uid');
-      });
-    });
-  }
 
   String createAuthUser(String emailInput, String passwordInput) {
     try {
