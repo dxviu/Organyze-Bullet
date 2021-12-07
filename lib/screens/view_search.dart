@@ -16,10 +16,12 @@ class viewSearch extends StatelessWidget {
   final _database = FirebaseDatabase.instance.reference();
   final ID = FirebaseAuth.instance.currentUser!.uid;
 
-  final notebookName = ModalRoute.of(context)!.settings.arguments as String;
+
 
   @override
   Widget build(BuildContext context) {
+    final notebookName = ModalRoute.of(context)!.settings.arguments as String;
+
     if(FirebaseAuth.instance.currentUser?.uid != null){
       print ("User is:");
       print(FirebaseAuth.instance.currentUser!.uid);

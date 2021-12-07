@@ -88,10 +88,9 @@ class addSearch extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         //onPressed: () {controller.addNoteToDatabase();},
-        onPressed: () {r.findNotebook(ID.text, friendNotebook.text);
+        onPressed: () {//r.findNotebook(ID.text, friendNotebook.text);
         Navigator.pushNamed(context, 'viewSearch');},
         ),
-      ),
-    );
+      );
   }
 }
