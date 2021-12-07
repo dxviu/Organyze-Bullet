@@ -51,10 +51,6 @@ bullet_key = {
 
 task_dictionary = dict()
 
-def database_ref(userID: str, notebookID: str):
-    ref = f"https://organyze-bullet-default-rtdb.firebaseio.com/Users/{userID}/Notebooks/{notebookID}/entries.json"
-    return ref
-
 
 @bot.event
 async def on_ready():
@@ -102,6 +98,35 @@ async def help(ctx):
                 inline=False)
     await ctx.send(embed=e)
 
+
+def database_ref(userID: str, notebookID: str):
+    ref = f"https://organyze-bullet-default-rtdb.firebaseio.com/Users/{userID}/Notebooks/{notebookID}/entries.json"
+    return ref
+
+async def get_last_notebook(discord_user):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f"{db_discord[:-5]}/{discord_user}.json") as r:
+            server_json = await r.json()
+            if "last_used" in server_json.keys():
+                return server_json["last_used"]
+            else:
+                return None
+
+
+@bot.command(name="notebook")
+async def change_notebook(ctx, userid: str, notebook: str):
+    insertion = {ctx.message.author.id: 
+        {"last_used": database_ref(userid, notebook)}
+    }
+    payload = json.dumps(insertion, separators=(',', ':'))
+    async with aiohttp.ClientSession() as session:
+        async with session.patch(db_discord, data=payload) as r:
+            if r.status == 200:
+                await ctx.send(f"Updated your notebook to {notebook} owned by {userid}")
+            else:
+                await ctx.send("Couldn't update your notebook")
+
+
 class createFlags(commands.FlagConverter, case_insensitive=True):
     named: str
     description: Optional[str]
@@ -112,6 +137,11 @@ class createFlags(commands.FlagConverter, case_insensitive=True):
 
 @bot.command()
 async def create(ctx, entry_type: str, *, flags: createFlags):
+    last_notebook_ref = await get_last_notebook(ctx.message.author.id)
+    if not last_notebook_ref:
+        await ctx.send("You haven't set your notebook yet! Use `o! notebook <notebookID> <userID>` first.")
+        return
+    
     # o! create event "Test event"
     # Alias for info
     if entry_type == "note":
@@ -130,7 +160,7 @@ async def create(ctx, entry_type: str, *, flags: createFlags):
         #     tzinfo=datetime.timezone.utc).timestamp() if flags.due else None
         # payload = json.dumps(entry_dict, separators=(',', ':'))
         async with aiohttp.ClientSession() as session:
-            async with session.post(db_ref, data=payload) as r:
+            async with session.post(last_notebook_ref, data=payload) as r:
                 server_json = await r.json()
                 created_id = server_json["name"]
                 response = "Got it!\nAdded your "
@@ -147,20 +177,31 @@ Entries can be one of the following: info, task, event, started, complete.""")
 
 @bot.command()
 async def delete(ctx, delete_id: str):
+    last_notebook_ref = await get_last_notebook(ctx.message.author.id)
+    if not last_notebook_ref:
+        await ctx.send("You haven't set your notebook yet! Use `o! notebook <notebookID> <userID>` first.")
+        return
+    
     async with aiohttp.ClientSession() as session:
-        async with session.get(db_ref) as r:
+        async with session.get(last_notebook_ref) as r:
             server_json = await r.json()
             if delete_id in server_json.keys():
-                delete_ref = f"https://organyze-bullet-default-rtdb.firebaseio.com/Users/-MnT6JQIenweIdXRoH8d/Notebooks/Demo/entries/{delete_id}.json"
+                #delete_ref = f"https://organyze-bullet-default-rtdb.firebaseio.com/Users/-MnT6JQIenweIdXRoH8d/Notebooks/Demo/entries/{delete_id}.json"
+                delete_ref = f"{last_notebook_ref[:-5]}/{delete_id}.json"
                 await session.delete(delete_ref)
                 await ctx.send(f"Deleted entry {delete_id}.")
 
 
 @bot.command(name="list")
 async def list_entries(ctx):
+    last_notebook_ref = await get_last_notebook(ctx.message.author.id)
+    if not last_notebook_ref:
+        await ctx.send("You haven't set your notebook yet! Use `o! notebook <notebookID> <userID>` first.")
+        return
+    
     response = "__Notebook: **Test**__\n"
     async with aiohttp.ClientSession() as session:
-        async with session.get(db_ref) as r:
+        async with session.get(last_notebook_ref) as r:
             server_json = await r.json()
             ordered_entries = sorted(server_json,
                                      key=lambda x:
@@ -172,9 +213,14 @@ async def list_entries(ctx):
 
 @bot.command(name="status")
 async def set_status(ctx, e_id: str, entry_type: str):
+    last_notebook_ref = await get_last_notebook(ctx.message.author.id)
+    if not last_notebook_ref:
+        await ctx.send("You haven't set your notebook yet! Use `o! notebook <notebookID> <userID>` first.")
+        return
+    
     if entry_type in bullet_key.keys():
         async with aiohttp.ClientSession() as session:
-            target_ref = f"{db_ref[:-5]}/{e_id}.json"
+            target_ref = f"{last_notebook_ref[:-5]}/{e_id}.json"
             async with session.get(target_ref) as r:
                 if r.status == 200:
                     server_json = await r.json()
@@ -191,8 +237,13 @@ Entries can be one of the following: info, task, event, started, complete.""")
 
 @bot.command(name="info")
 async def get_info(ctx, e_id: str):
+    last_notebook_ref = await get_last_notebook(ctx.message.author.id)
+    if not last_notebook_ref:
+        await ctx.send("You haven't set your notebook yet! Use `o! notebook <notebookID> <userID>` first.")
+        return
+    
     async with aiohttp.ClientSession() as session:
-        target_ref = f"{db_ref[:-5]}/{e_id}.json"
+        target_ref = f"{last_notebook_ref[:-5]}/{e_id}.json"
         async with session.get(target_ref) as r:
             if r.status == 200:
                 server_json = await r.json()
@@ -221,8 +272,13 @@ async def set_complete(ctx, e_id: str):
 
 @bot.command()
 async def remind(ctx, time, *, task_id):
+    last_notebook_ref = await get_last_notebook(ctx.message.author.id)
+    if not last_notebook_ref:
+        await ctx.send("You haven't set your notebook yet! Use `o! notebook <notebookID> <userID>` first.")
+        return
+    
     async with aiohttp.ClientSession() as session:
-        target_ref = f"{db_ref[:-5]}/{task_id}.json"
+        target_ref = f"{last_notebook_ref[:-5]}/{task_id}.json"
         async with session.get(target_ref) as r:
             if r.status == 200:
                 server_json = await r.json()
@@ -253,6 +309,11 @@ class testFlags(commands.FlagConverter, case_insensitive=True):
 
 @bot.command()
 async def test(ctx, task_id: str, *, flags: testFlags):
+    last_notebook_ref = await get_last_notebook(ctx.message.author.id)
+    if not last_notebook_ref:
+        await ctx.send("You haven't set your notebook yet! Use `o! notebook <notebookID> <userID>` first.")
+        return
+    
     # Usage: o! <taskID> time: <time> assigned: <mentions>
     #await ctx.send("enter time")
     #user_input_time = await bot.wait_for('message')
@@ -272,7 +333,7 @@ async def test(ctx, task_id: str, *, flags: testFlags):
     #members = ", ".join(members.mention for x in members)
     await ctx.send(f"list of members: {members}")
     async with aiohttp.ClientSession() as session:
-        target_ref = f"{db_ref[:-5]}/{task_id}.json"
+        target_ref = f"{last_notebook_ref[:-5]}/{task_id}.json"
         async with session.get(target_ref, data = payload) as r:
             if r.status == 200:
                 server_json = await r.json()
