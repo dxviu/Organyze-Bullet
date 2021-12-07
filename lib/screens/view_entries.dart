@@ -11,7 +11,7 @@ import 'package:organyzebullet_app/database/dataModels.dart';
 class viewEntries extends StatelessWidget{
   // final controller = Get.put(NoteController());
   final _database = FirebaseDatabase.instance.reference();
-  final String ID = "-test";//FirebaseAuth.instance.currentUser?.uid ?? "-test";
+  final String ID = FirebaseAuth.instance.currentUser!.uid;//as String;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,8 @@ class viewEntries extends StatelessWidget{
     }
     else {print("null user");}
     final notebookName = ModalRoute.of(context)!.settings.arguments as String;
-    final String path = 'Users/$ID/Notebooks/$notebookName/entries/';
+    String path = 'Users/$ID/Notebooks/$notebookName/entries/';
+    print(path);
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.light,
@@ -48,42 +49,44 @@ class viewEntries extends StatelessWidget{
         ],
       ),
       body: StreamBuilder(
-          stream: entryStreamPublisher().getEntryStream(path),
+          stream: _database.child(path).onValue,
           builder: (context, snapshot) {
             final tilesList = <ListTile>[];
-            print(path);
-            if (snapshot.hasData){
-              final myEntrys = snapshot.data as List<entryModel>;
-              tilesList.addAll(
-                myEntrys.map((nextEntry){
-                  return ListTile(
-                      onLongPress: () {
-                        String eUID = nextEntry.UID;
-                        _database.child("$path$eUID").remove();
-                        },
-
-                      trailing: Text(nextEntry.date), //or icon
-                      title: Text(nextEntry.entryName),
-                      subtitle: Text(nextEntry.description),
-                      leading: Icon(setIcon(nextEntry.entryType))
-                  );
-                }),
-              );
-            } else {
-              tilesList.add(
-                ListTile(
-                  leading: Icon(Icons.list),
-                  title: Text("No Entry Created"))
+            if(snapshot.hasError == false){
+              final entryList = Map<String,dynamic>.from((snapshot.data! as Event).snapshot.value);
+              entryList.forEach((key, value) {
+                final nextEntry = Map<String,dynamic>.from(value);
+                final orderTile = ListTile(
+                    onLongPress: () {
+                      String eUID = nextEntry["entry-id"];
+                      _database.child("$path$eUID").remove();
+                    },
+                   // trailing: Text(nextEntry.date), //or icon
+                    title: Text(nextEntry['name']),
+                    subtitle: Text(nextEntry['description']),
+                    leading: Icon(setIcon(nextEntry['type']))
+                );
+                tilesList.add(orderTile);
+              }
               );
             }
+            else {
+              final tilesList = <ListTile>[];
+              tilesList.add(ListTile(
+                  leading: Icon(Icons.list),
+                  title: Text("No Notebook Created")
+              ));}
             //ListView.builder(
             //   itemCount: 5,
             //  itemBuilder: (BuildContext context, int index) {
             return
               ListView(
-              children: tilesList,
-            );
-          }),
+                children: tilesList,
+              );
+            // }
+            //);
+          }
+      ),
 
 
       floatingActionButton: FloatingActionButton(
