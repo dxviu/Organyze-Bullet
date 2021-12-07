@@ -1,17 +1,19 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:organyzebullet_app/database/dataModels.dart';
 import '../main.dart';
+import 'package:crypto/crypto.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 
 class realtime {
 
   final _database = FirebaseDatabase.instance.reference();
   //FirebaseAuth auth = FirebaseAuth.instance;
-
+  double epoch = DateTime.now().toUtc().millisecondsSinceEpoch/1000;
 
   void createUser(String ID, String username, String email) {
     final account = _database.child('Users/');
@@ -43,15 +45,15 @@ class realtime {
         .catchError((error) => print("cannot create notebook, try again"));
   }
 
-  void createEntry(String ID,String notebookName,String name,String type,String timeStamp,String description){
+  void createEntry(String ID,String notebookName,String name,String type,String description){
     final String _path = 'Users/$ID/Notebooks/$notebookName/entries/';
     final account = _database.child(_path);
-    final String entryID = getRandomString(10);
+    final String entryID = getSHA256HASH(name);
     account.update({entryID: {
       "name" : name,
       "type" : type,
-      "UID" : entryID,
-      "timestamp" : timeStamp,
+      "entry_id" : entryID,
+      "timestamp" : epoch,
       "description" : description
     }
     }
@@ -69,7 +71,12 @@ class realtime {
   }
 
 
-
+  String getSHA256HASH(String name) {
+    String input = name + epoch.toString() + "None";
+    var bytes1 = utf8.encode(input); // data being hashed
+    Digest digest1 = sha256.convert(bytes1);
+    return digest1.toString();
+  }
 }
 
 

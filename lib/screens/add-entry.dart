@@ -12,7 +12,7 @@ class AddNewEntry extends StatelessWidget {
   //final NoteController controller = Get.find();
   final _database = FirebaseDatabase.instance.reference();
   realtime r = new realtime();
-  final ID = "-test";//FirebaseAuth.instance.currentUser?.uid ?? "test";
+  final ID = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +89,7 @@ class AddNewEntry extends StatelessWidget {
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
               ),
-              TextField(
+              /*TextField(
                 style: TextStyle(
                   fontSize: 22,
                 ),
@@ -104,7 +104,7 @@ class AddNewEntry extends StatelessWidget {
                 ),
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
-              ),
+              ),*/
               /*TextField(
                 style: TextStyle(
                   fontSize: 22,
@@ -142,7 +142,7 @@ class AddNewEntry extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         //onPressed: () {controller.addNoteToDatabase();},
-        onPressed: () { r.createEntry(ID, notebookName, title.text , type.text, date.text, desc.text); },
+        onPressed: () { r.createEntry(ID, notebookName, title.text , type.text,  desc.text); },
         child: Icon(
           Icons.check,
         ),
