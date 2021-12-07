@@ -213,6 +213,10 @@ async def set_complete(ctx, e_id: str):
     await set_status(ctx, e_id, "complete")
 
 
+def database_ref(userID: str, notebookID: str):
+    ref = f"https://organyze-bullet-default-rtdb.firebaseio.com/Users/{userID}/Notebooks/{notebookID}/entries.json"
+    return ref
+
 @bot.command()
 async def remind(ctx, time, *, task_id):
     async with aiohttp.ClientSession() as session:
