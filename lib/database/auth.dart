@@ -27,7 +27,7 @@ class auth {
   //      expect(getCurrentUserID(), 'no uid');
   //    });
   //  });
-  }
+  //}
 
   String createAuthUser(String emailInput, String passwordInput) {
     try {
