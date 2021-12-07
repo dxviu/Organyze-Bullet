@@ -8,16 +8,20 @@ import 'package:organyzebullet_app/database/realtime_database_function.dart';
 
 //import '../controllers/note_controller.dart';
 
-class AddNewEntry extends StatelessWidget {
+
+class updateEntry extends StatelessWidget {
   //final NoteController controller = Get.find();
   final _database = FirebaseDatabase.instance.reference();
   realtime r = new realtime();
-  final ID = "-test";//FirebaseAuth.instance.currentUser?.uid ?? "test";
+  final ID = FirebaseAuth.instance.currentUser?.uid ?? "test";
+
 
   @override
   Widget build(BuildContext context) {
 
-    final notebookName = ModalRoute.of(context)!.settings.arguments as String;
+
+    final newPath = ModalRoute.of(context)!.settings.arguments as String;
+
 
     final title = TextEditingController();
     final type = TextEditingController();
@@ -89,7 +93,9 @@ class AddNewEntry extends StatelessWidget {
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
               ),
-              TextField(
+
+              /*TextField(
+
                 style: TextStyle(
                   fontSize: 22,
                 ),
@@ -104,7 +110,8 @@ class AddNewEntry extends StatelessWidget {
                 ),
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
-              ),
+              ),*/
+
               /*TextField(
                 style: TextStyle(
                   fontSize: 22,
@@ -142,7 +149,8 @@ class AddNewEntry extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         //onPressed: () {controller.addNoteToDatabase();},
-        onPressed: () { r.createEntry(ID, notebookName, title.text , type.text, date.text); },
+        onPressed: () { r.createEntryWithPath(ID, newPath, title.text , type.text,  desc.text); },
+
         child: Icon(
           Icons.check,
         ),

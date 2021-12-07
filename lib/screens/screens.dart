@@ -7,3 +7,6 @@ export 'view_entries.dart';
 export 'view_notebooks.dart';
 export 'add-notebook.dart';
 export 'settings-screen.dart';
+export 'update-entry.dart';
+export 'view_search.dart';
+export 'add-search.dart';

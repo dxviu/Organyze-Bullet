@@ -10,14 +10,15 @@ import 'package:organyzebullet_app/screens/screens.dart';
 import '../pallete.dart';
 
 
-
-class viewNotebooks extends StatelessWidget {
- // final controller = Get.put(NoteController());
+class viewSearch extends StatelessWidget {
+  // final controller = Get.put(NoteController());
   final _database = FirebaseDatabase.instance.reference();
-  final ID = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
+    final ID = ModalRoute.of(context)!.settings.arguments as String;
+    //final notebookname = Text(args.notebookname)
+
     if(FirebaseAuth.instance.currentUser?.uid != null){
       print ("User is:");
       print(FirebaseAuth.instance.currentUser!.uid);
@@ -95,22 +96,13 @@ class viewNotebooks extends StatelessWidget {
             //ListView.builder(
             //   itemCount: 5,
             //  itemBuilder: (BuildContext context, int index) {
-              return
-                ListView(
-                  children: tilesList,
-                );
+            return
+              ListView(
+                children: tilesList,
+              );
             // }
             //);
           }
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //Get.to(AddNewNotePage());
-          Navigator.pushNamed(context, 'AddNewNotebook');
-          },
-        child: Icon(
-          Icons.add,
-        ),
       ),
     );
 
@@ -127,5 +119,8 @@ class viewNotebooks extends StatelessWidget {
   }
 
 
-
+  final Map<String, dynamic> nullSafeMap = {
+    "notebookName": "no notebooks available",
+    "notebookID": 2,
+  };
 }

@@ -61,6 +61,10 @@ class viewEntries extends StatelessWidget{
                       String eUID = nextEntry["entry-id"];
                       _database.child("$path$eUID").remove();
                     },
+                    onTap: () {
+                      String newPath = 'Users/$ID/Notebooks/$notebookName/entries/${nextEntry["entry-id"]}/';
+                      Navigator.pushNamed(context, 'update-entry', arguments:newPath);
+                    },
                    // trailing: Text(nextEntry.date), //or icon
                     title: Text(nextEntry['name']),
                     subtitle: Text(nextEntry['description']),
@@ -92,7 +96,7 @@ class viewEntries extends StatelessWidget{
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           //Get.to(AddNewNotePage());
-          Navigator.pushNamed(context, 'AddNewEntry', arguments: notebookName,);
+          Navigator.pushNamed(context, 'AddNewEntry', arguments:{ notebookName,"hi"});
         },
         child: Icon(
           Icons.add,
