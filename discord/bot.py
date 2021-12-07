@@ -29,6 +29,8 @@ firebase_key = os.environ['firebase_key']
 
 # hardcoded for demo
 db_ref = "https://organyze-bullet-default-rtdb.firebaseio.com/Users/-MnT6JQIenweIdXRoH8d/Notebooks/Demo/entries.json"
+db_users = "https://organyze-bullet-default-rtdb.firebaseio.com/Users.json"
+db_discord = "https://organyze-bullet-default-rtdb.firebaseio.com/Discord.json"
 
 prefix = 'o! '
 intents = nextcord.Intents.all()
@@ -48,6 +50,10 @@ bullet_key = {
 }
 
 task_dictionary = dict()
+
+def database_ref(userID: str, notebookID: str):
+    ref = f"https://organyze-bullet-default-rtdb.firebaseio.com/Users/{userID}/Notebooks/{notebookID}/entries.json"
+    return ref
 
 
 @bot.event
@@ -213,10 +219,6 @@ async def set_complete(ctx, e_id: str):
     await set_status(ctx, e_id, "complete")
 
 
-def database_ref(userID: str, notebookID: str):
-    ref = f"https://organyze-bullet-default-rtdb.firebaseio.com/Users/{userID}/Notebooks/{notebookID}/entries.json"
-    return ref
-
 @bot.command()
 async def remind(ctx, time, *, task_id):
     async with aiohttp.ClientSession() as session:
@@ -354,5 +356,33 @@ async def test2(ctx, *, flags: test2Flags):
     members = ', '.join(str(member) for member in flags.assigned)
     plural = f'{flags.days} times' if flags.days != 1 else f'{flags.days} time'
     await ctx.send(f'Test: {members} for {flags.test!r} (number {plural})')
+
+@bot.command(name="auth")
+async def link_accounts(ctx, email: str):
+    params = {"orderBy": '"Email"', "equalTo": f'"{email}"'}
+    user_ID = ""
+    discord_ID = str(ctx.message.author.id)
+    if not isinstance(ctx.channel, nextcord.channel.DMChannel):
+        await ctx.send("This command must be used in a direct message to me!")
+    else:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(db_users, params=params) as r:
+                server_json = await r.json()
+                if len(server_json) > 0: # User exists
+                    user_ID = list(server_json.keys())[0]
+                    insertion = {"discordID": discord_ID}
+                    payload = json.dumps(insertion, separators=(',', ':'))
+                    await session.patch(f"{db_users[:-5]}/{user_ID}.json", data=payload)
+
+                    insertion = {discord_ID:
+                        {"user_id": user_ID,
+                        "last_notebook": None}}
+                    payload = json.dumps(insertion, separators=(',', ':'))
+                    await session.patch(db_discord, data=payload)
+
+                    bot_response = f"Linked your ID {discord_ID} with the email {email}."
+                    await ctx.send(bot_response)
+                else: # User does not exist
+                    await ctx.send("I can't find that email on the server...")
 
 bot.run(token)
