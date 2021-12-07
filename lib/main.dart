@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         'AddNewNotebook':(context) => AddNewNotebook(),
         'settings-screen':(context) => Settings(),
         'updateEntry':(context) => updateEntry()
-        'viewSearch':(context) => viewSearch(),
+        'view-search':(context) => viewSearch(),
         'add-search':(context) => addSearch(),
       },
 
