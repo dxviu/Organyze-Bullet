@@ -19,6 +19,7 @@ class updateEntry extends StatelessWidget {
 
     final newPath = ModalRoute.of(context)!.settings.arguments as String;
 
+
     final title = TextEditingController();
     final type = TextEditingController();
     final date = TextEditingController();

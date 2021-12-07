@@ -39,10 +39,12 @@ class realtime {
     account.update({notebookName: {
       "notebookname":notebookName,
       "notebookID" : 2
+
     }
     }
     ).then((_) => print("Has been added"))
         .catchError((error) => print("cannot create notebook, try again"));
+    createEntry(ID, notebookName, "newEntry", "", "Use the button or edit this entry to get started on your notebook!");
   }
 
   void createEntry(String ID,String notebookName,String name,String type,String description){
