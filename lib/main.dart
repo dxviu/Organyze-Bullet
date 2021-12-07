@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
         'viewNotebooks':(context) => viewNotebooks(),
         'AddNewNotebook':(context) => AddNewNotebook(),
         'settings-screen':(context) => Settings(),
+        'updateEntry':(context) => updateEntry()
       },
 
     );
