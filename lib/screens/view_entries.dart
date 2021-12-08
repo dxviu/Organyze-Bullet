@@ -58,8 +58,17 @@ class viewEntries extends StatelessWidget{
                 final nextEntry = Map<String,dynamic>.from(value);
                 final orderTile = ListTile(
                     onLongPress: () {
-                      String eUID = nextEntry["entry-id"];
-                      _database.child("$path$eUID").remove();
+                      if(tilesList.length == 1){
+                      print("Cant delete this");
+                    }
+                      else {
+                        String eUID = nextEntry["entry_id"];
+                        _database.child("$path$eUID").remove();
+                      }
+                    },
+                    onTap: () {
+                      String newPath = 'Users/$ID/Notebooks/$notebookName/entries/${nextEntry["entry_id"]}/';
+                      Navigator.pushNamed(context, 'updateEntry', arguments:newPath);
                     },
                    // trailing: Text(nextEntry.date), //or icon
                     title: Text(nextEntry['name']),
@@ -92,7 +101,7 @@ class viewEntries extends StatelessWidget{
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           //Get.to(AddNewNotePage());
-          Navigator.pushNamed(context, 'AddNewEntry', arguments: notebookName,);
+          Navigator.pushNamed(context, 'AddNewEntry', arguments: notebookName);
         },
         child: Icon(
           Icons.add,

@@ -39,14 +39,32 @@ class realtime {
     account.update({notebookName: {
       "notebookname":notebookName,
       "notebookID" : 2
+
     }
     }
     ).then((_) => print("Has been added"))
         .catchError((error) => print("cannot create notebook, try again"));
+    createEntry(ID, notebookName, "newEntry", "", "Use the button or edit this entry to get started on your notebook!");
   }
 
   void createEntry(String ID,String notebookName,String name,String type,String description){
     final String _path = 'Users/$ID/Notebooks/$notebookName/entries/';
+    final account = _database.child(_path);
+    final String entryID = getSHA256HASH(name);
+    account.update({entryID: {
+      "name" : name,
+      "type" : type,
+      "entry_id" : entryID,
+      "timestamp" : epoch,
+      "description" : description
+    }
+    }
+    ).then((_) => print("entry has been added"))
+        .catchError((error) => print("cannot create entry, try again"));
+  }
+
+  void createEntryWithPath(String ID,String newPath,String name,String type,String description){
+    final String _path = newPath;
     final account = _database.child(_path);
     final String entryID = getSHA256HASH(name);
     account.update({entryID: {
