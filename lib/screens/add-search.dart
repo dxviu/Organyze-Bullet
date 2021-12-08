@@ -90,7 +90,7 @@ class addSearch extends StatelessWidget {
         //onPressed: () {controller.addNoteToDatabase();},
         onPressed: () { //r.findNotebook(ID.text, friendNotebook.text);
           Navigator.pushNamed(
-              context, 'viewSearch', arguments: ID.text);
+              context, 'view_search', arguments: ID.text);
         }),
     );
   }
