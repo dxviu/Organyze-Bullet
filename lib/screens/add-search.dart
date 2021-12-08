@@ -12,15 +12,15 @@ class addSearch extends StatelessWidget {
   //final NoteController controller = Get.find();
   final _database = FirebaseDatabase.instance.reference();
   realtime r = new realtime();
-  final ID = FirebaseAuth.instance.currentUser?.uid ?? "test";
 
   @override
   Widget build(BuildContext context) {
 
     final ID = TextEditingController();
-    final friendNotebook = TextEditingController();
+    final notebookname = TextEditingController();
+
     ID.addListener(() => {});
-    friendNotebook.addListener(() => {});
+    notebookname.addListener(() => {});
 
 
     return Scaffold(
@@ -65,7 +65,7 @@ class addSearch extends StatelessWidget {
                 ),
               ),
               TextField(
-                controller: friendNotebook,
+                controller: notebookname,
                 //controller: controller.titleController,
                 style: TextStyle(
                   fontSize: 27,
@@ -88,9 +88,10 @@ class addSearch extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         //onPressed: () {controller.addNoteToDatabase();},
-        onPressed: () {//r.findNotebook(ID.text, friendNotebook.text);
-        Navigator.pushNamed(context, 'viewSearch');},
-        ),
-      );
+        onPressed: () { //r.findNotebook(ID.text, friendNotebook.text);
+          Navigator.pushNamed(
+              context, 'viewSearch', arguments: ID.text);
+        }),
+    );
   }
 }
